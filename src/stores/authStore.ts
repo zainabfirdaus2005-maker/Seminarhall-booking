@@ -399,11 +399,23 @@ export const useAuthStore = create<AuthState>()(
 						});
 
 					if (authError) {
-						throw new Error(authError.message);
+						// Map Supabase auth errors to user-friendly messages
+						const errorMsg = authError.message.toLowerCase();
+						if (errorMsg.includes('invalid login credentials') || errorMsg.includes('invalid_credentials')) {
+							throw new Error("Incorrect email or password. Please check your credentials and try again.");
+						} else if (errorMsg.includes('email not confirmed')) {
+							throw new Error("Please verify your email address before logging in. Check your inbox for the verification link.");
+						} else if (errorMsg.includes('too many requests') || errorMsg.includes('rate limit')) {
+							throw new Error("Too many login attempts. Please wait a few minutes before trying again.");
+						} else if (errorMsg.includes('network') || errorMsg.includes('fetch')) {
+							throw new Error("Network error. Please check your internet connection and try again.");
+						} else {
+							throw new Error(authError.message);
+						}
 					}
 
 					if (!authData.user) {
-						throw new Error("Authentication failed");
+						throw new Error("Authentication failed. Please try again.");
 					}
 
 					// Check if email is verified

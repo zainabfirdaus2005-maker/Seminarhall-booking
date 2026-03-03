@@ -52,8 +52,21 @@ export default function LoginScreen({ navigation }: Props) {
 	const { login, error, clearError } = useAuthStore();
 
 	const handleLogin = async () => {
-		if (!email || !password) {
-			Alert.alert("Missing Information", "Please fill in all fields");
+		if (!email && !password) {
+			Alert.alert(
+				"Missing Information",
+				"Please enter your email and password.",
+			);
+			Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+			return;
+		}
+		if (!email) {
+			Alert.alert("Email Required", "Please enter your email address.");
+			Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+			return;
+		}
+		if (!password) {
+			Alert.alert("Password Required", "Please enter your password.");
 			Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
 			return;
 		}
