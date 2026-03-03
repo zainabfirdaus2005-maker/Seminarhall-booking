@@ -53,8 +53,9 @@
     ],
     "extra": {
       "eas": {
-        "projectId": ""
+        "projectId": "aab5d04f-5834-4dba-8da9-73cb28a18b58"
       }
-    }
+    },
+    "owner": "zainabfirdaus"
   }
 }
