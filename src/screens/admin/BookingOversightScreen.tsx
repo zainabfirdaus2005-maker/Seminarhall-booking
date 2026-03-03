@@ -696,7 +696,7 @@ const BookingOversightScreen: React.FC = () => {
 				<Text
 					style={[styles.filterHintText, isDark && styles.filterHintTextDark]}
 				>
-					💡 Tap filters to change options
+					Tap filters to change options
 				</Text>
 			</View>
 			{/* Bookings List */}

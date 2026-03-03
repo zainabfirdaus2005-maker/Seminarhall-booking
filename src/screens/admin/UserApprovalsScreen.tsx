@@ -165,7 +165,7 @@ export default function UserApprovalsScreen({
 								await loadPendingUsers();
 								
 								Alert.alert(
-									"✅ User Approved",
+									"User Approved",
 									`${userToApprove.name} has been approved and can now access the app.`,
 									[{ text: "OK" }]
 								);

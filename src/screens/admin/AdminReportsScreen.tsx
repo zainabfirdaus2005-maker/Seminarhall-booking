@@ -175,24 +175,24 @@ const AdminReportsScreen: React.FC = () => {
 				filePath = await adminReportsService.exportDataAsPDF(
 					selectedTimeRange.value
 				);
-				successMessage = `📋 Comprehensive PDF Report exported successfully!
+				successMessage = `Comprehensive PDF Report exported successfully!
 				
-✅ Includes: Analytics overview, popular halls, top users, and complete booking records with user details, contact information, booking purposes, equipment requests, and approval history.
+Includes: Analytics overview, popular halls, top users, and complete booking records with user details, contact information, booking purposes, equipment requests, and approval history.
 
 Perfect for stakeholder presentations and data analysis!`;
 			} else {
 				filePath = await adminReportsService.exportDataAsExcel(
 					selectedTimeRange.value
 				);
-				successMessage = `📊 Detailed Excel/CSV Data exported successfully!
+				successMessage = `Detailed Excel/CSV Data exported successfully!
 				
-✅ Includes: All booking records with complete user information, hall details, timing, purpose, attendees, equipment, approval data, and feedback.
+Includes: All booking records with complete user information, hall details, timing, purpose, attendees, equipment, approval data, and feedback.
 
 Ready for data analysis, pivot tables, and business intelligence tools!`;
 			}
 
 			// Show success message with the option to share again
-			Alert.alert("Export Successful! 🎉", successMessage, [
+			Alert.alert("Export Successful! ", successMessage, [
 				{
 					text: "OK",
 					style: "default",
@@ -293,7 +293,7 @@ Ready for data analysis, pivot tables, and business intelligence tools!`;
 			<Text
 				style={[styles.timeRangeLabel, isDark && styles.timeRangeLabelDark]}
 			>
-				📊 Analytics Period
+				Analytics Period
 			</Text>
 			<ScrollView
 				horizontal
@@ -344,7 +344,7 @@ Ready for data analysis, pivot tables, and business intelligence tools!`;
 	const renderHallUsageList = () => (
 		<View style={[styles.section, isDark && styles.sectionDark]}>
 			<Text style={[styles.sectionTitle, isDark && styles.sectionTitleDark]}>
-				🏛️ Popular Halls
+				Popular Halls
 			</Text>
 			{metrics?.popular_halls.map((hall, index) => (
 				<View
@@ -408,7 +408,7 @@ Ready for data analysis, pivot tables, and business intelligence tools!`;
 	const renderUserActivityList = () => (
 		<View style={[styles.section, isDark && styles.sectionDark]}>
 			<Text style={[styles.sectionTitle, isDark && styles.sectionTitleDark]}>
-				👥 Top Users
+				Top Users
 			</Text>
 			{metrics?.user_activity.map((user, index) => (
 				<View
@@ -617,7 +617,7 @@ Ready for data analysis, pivot tables, and business intelligence tools!`;
 							isDark && styles.dataInsightsTitleDark,
 						]}
 					>
-						📊 Data Analyst Features
+						Data Analyst Features
 					</Text>
 					<View style={styles.dataInsightsGrid}>
 						<View
@@ -700,7 +700,7 @@ Ready for data analysis, pivot tables, and business intelligence tools!`;
 							isDark && styles.dataInsightsDescriptionDark,
 						]}
 					>
-						💡 Includes user contact info, booking purposes, equipment requests,
+						Includes user contact info, booking purposes, equipment requests,
 						approval history, feedback, and more for comprehensive analysis
 					</Text>
 				</View>
@@ -759,7 +759,7 @@ Ready for data analysis, pivot tables, and business intelligence tools!`;
 									isDark && styles.sectionHeaderTitleDark,
 								]}
 							>
-								📈 Key Performance Metrics
+								Key Performance Metrics
 							</Text>
 							<View style={styles.metricsGrid}>
 								{renderMetricCard(

@@ -1359,7 +1359,7 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 											{!availabilityCheck.is_available && (
 												<View style={styles.conflictInfo}>
 													<Text style={styles.conflictTitle}>
-														⚠️ Time Slot Already Booked
+														Time Slot Already Booked
 													</Text>
 													<Text style={styles.conflictSubtitle}>
 														This time period has been reserved by:
@@ -1381,14 +1381,14 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 																</View>
 																<View style={styles.conflictDetails}>
 																	<Text style={styles.conflictTimeText}>
-																		🕒 {formatTime(conflict.start_time)} -{" "}
+																		{formatTime(conflict.start_time)} -{" "}
 																		{formatTime(conflict.end_time)}
 																	</Text>
 																	<Text style={styles.conflictPurposeText}>
-																		📝 Purpose: {conflict.purpose}
+																		Purpose: {conflict.purpose}
 																	</Text>
 																	<Text style={styles.conflictStatusText}>
-																		📊 Status:{" "}
+																		Status:{" "}
 																		{conflict.status.charAt(0).toUpperCase() +
 																			conflict.status.slice(1)}
 																	</Text>
@@ -1397,7 +1397,7 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 														),
 													)}
 													<Text style={styles.conflictAdvice}>
-														💡 Please choose a different time slot or check the
+														Please choose a different time slot or check the
 														suggested times below.
 													</Text>
 												</View>
@@ -1458,7 +1458,7 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 								{bookedSlots.length > 0 ?
 									<View style={styles.bookedSlotsContainer}>
 										<Text style={styles.bookedSlotsTitle}>
-											⏰ Already booked times ({bookedSlots.length} booking
+											Already booked times ({bookedSlots.length} booking
 											{bookedSlots.length !== 1 ? "s" : ""}):
 										</Text>
 										{bookedSlots
@@ -1494,14 +1494,14 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 														style={styles.bookedSlotPurpose}
 														numberOfLines={1}
 													>
-														📝 {booking.purpose}
+														{booking.purpose}
 													</Text>
 													{booking.user_name && (
 														<Text
 															style={styles.bookedSlotUser}
 															numberOfLines={1}
 														>
-															👤 {booking.user_name}
+															{booking.user_name}
 														</Text>
 													)}
 												</View>
@@ -1513,7 +1513,7 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 												color={theme.colors.text.secondary}
 											/>
 											<Text style={styles.bookedSlotsHintText}>
-												💡 Choose a time that doesn't overlap with these
+												Choose a time that doesn't overlap with these
 												bookings
 											</Text>
 										</View>
@@ -1526,7 +1526,7 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 											color={theme.colors.success}
 										/>
 										<Text style={styles.noBookedSlotsText}>
-											🎉 No bookings for this day! All time slots are available.
+											No bookings for this day! All time slots are available.
 										</Text>
 									</View>
 								:	null}

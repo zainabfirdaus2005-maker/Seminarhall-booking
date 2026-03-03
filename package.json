@@ -1,5 +1,5 @@
 {
-	"name": "seminarhall-booking-app",
+	"name": "macet-seminar-hall-booking",
 	"version": "1.0.0",
 	"main": "index.ts",
 	"scripts": {

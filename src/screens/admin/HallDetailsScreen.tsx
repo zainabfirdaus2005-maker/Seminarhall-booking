@@ -382,7 +382,7 @@ export default function HallDetailsScreen({
 									{ color: Colors.warning.main },
 								]}
 							>
-								⚠️ Under Maintenance
+								Under Maintenance
 							</Text>
 							{hall.maintenance_notes && (
 								<Text

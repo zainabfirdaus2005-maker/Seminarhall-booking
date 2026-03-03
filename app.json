@@ -1,7 +1,7 @@
 {
 	"expo": {
-		"name": "Seminarhall-booking-app",
-		"slug": "seminar-hall-booking",
+		"name": "MACET Seminar Hall Booking",
+		"slug": "macet-seminar-hall-booking",
 		"version": "1.0.0",
 		"orientation": "portrait",
 		"icon": "./assets/icon.png",
@@ -34,7 +34,7 @@
 			"icon": "./assets/icon.png",
 			"color": "#3b82f6",
 			"androidMode": "default",
-			"androidCollapsedTitle": "📅 Seminar Hall Booking"
+			"androidCollapsedTitle": "MACET Seminar Hall Booking"
 		},
 		"plugins": [
 			[

@@ -180,7 +180,7 @@ const HelpSupportScreen: React.FC<HelpSupportScreenProps> = () => {
 						<View style={styles.infoRow}>
 							<Text style={styles.infoLabel}>Email System</Text>
 							<Text style={[styles.infoValue, { color: Colors.success.main }]}>
-								✅ Active & Integrated
+								Active & Integrated
 							</Text>
 						</View>
 						<View style={styles.infoRow}>

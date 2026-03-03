@@ -499,7 +499,7 @@ const BookedCalendarScreen: React.FC<BookedCalendarScreenProps> = ({
 							{ marginBottom: 8, fontStyle: "italic" },
 						]}
 					>
-						📍 Showing all bookings from all users
+						Showing all bookings from all users
 					</Text>
 					<View style={styles.legendItems}>
 						<View style={styles.legendRow}>
@@ -664,7 +664,7 @@ const BookedCalendarScreen: React.FC<BookedCalendarScreenProps> = ({
 															color={dynamicTheme.colors.text.secondary}
 														/>
 														<Text style={styles.detailText} numberOfLines={1}>
-															👤 {booking.user_name}
+															{booking.user_name}
 														</Text>
 													</View>
 												)}

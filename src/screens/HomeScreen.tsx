@@ -634,8 +634,7 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
 							<Text
 								style={[styles.greeting, { color: themeColors.text.secondary }]}
 							>
-								{getGreeting()} 👋
-							</Text>
+								{getGreeting()} </Text>
 							<Text
 								style={[styles.userName, { color: themeColors.text.primary }]}
 							>

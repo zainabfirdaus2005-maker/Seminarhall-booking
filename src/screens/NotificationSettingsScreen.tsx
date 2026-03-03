@@ -393,7 +393,7 @@ export const NotificationSettingsScreen: React.FC<
 											if (!user?.id) return;
 											await notificationService.createNotification({
 												userId: user.id,
-												title: "🧪 Test Notification",
+												title: "Test Notification",
 												message:
 													"This is a test notification to verify your settings are working correctly.",
 												type: "system",

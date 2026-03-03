@@ -720,7 +720,7 @@ class AdminReportsService {
 </head>
 <body>
     <div class="header">
-        <h1>📊 Seminar Hall Analytics Report</h1>
+        <h1>Seminar Hall Analytics Report</h1>
         <p>Period: ${timeRangeLabel} | Generated: ${currentDate}</p>
     </div>
 
@@ -740,7 +740,7 @@ class AdminReportsService {
     </div>
 
     <div class="section">
-        <h2>🏛️ Popular Halls</h2>
+        <h2>Popular Halls</h2>
         <table>
             <thead>
                 <tr>
@@ -766,7 +766,7 @@ class AdminReportsService {
     </div>
 
     <div class="section">
-        <h2>👥 Top Users</h2>
+        <h2>Top Users</h2>
         <table>
             <thead>
                 <tr>
@@ -792,7 +792,7 @@ class AdminReportsService {
     </div>
 
     <div class="section">
-        <h2>📋 Detailed Booking Records</h2>
+        <h2>Detailed Booking Records</h2>
         <p style="color: #666; margin-bottom: 15px;">Complete booking information for data analysis</p>
         <table>
             <thead>
@@ -849,7 +849,7 @@ class AdminReportsService {
             </tbody>
         </table>
         <p style="color: #666; font-size: 12px; margin-top: 15px;">
-            📊 Total Records: ${metrics.detailed_bookings.length} | 
+            Total Records: ${metrics.detailed_bookings.length} | 
             Approved: ${metrics.detailed_bookings.filter(b => b.status === 'approved').length} | 
             Pending: ${metrics.detailed_bookings.filter(b => b.status === 'pending').length} | 
             Cancelled: ${metrics.detailed_bookings.filter(b => b.status === 'cancelled').length}
@@ -857,7 +857,7 @@ class AdminReportsService {
     </div>
 
     <div class="footer">
-        <p>📈 This report was generated automatically by the Seminar Hall Booking System.</p>
+        <p>This report was generated automatically by the Seminar Hall Booking System.</p>
         <p>For questions or support, please contact the system administrator.</p>
     </div>
 </body>
