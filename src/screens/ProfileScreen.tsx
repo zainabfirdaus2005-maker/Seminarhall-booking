@@ -8,6 +8,7 @@ import {
 	TouchableOpacity,
 	Image,
 	ActivityIndicator,
+	Alert,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Ionicons } from "@expo/vector-icons";
@@ -86,8 +87,21 @@ export default function ProfileScreen({ navigation }: Props) {
 		{
 			icon: "person-outline",
 			title: "Edit Profile",
-			description: "Update your personal information",
-			action: () => navigation.navigate("EditProfile"),
+			description:
+				user?.role === "faculty" ?
+					"Contact admin to update your profile"
+				:	"Update your personal information",
+			action: () => {
+				if (user?.role === "faculty") {
+					Alert.alert(
+						"Profile Edit Restricted",
+						"Faculty members cannot edit their profile directly. Please contact the admin to update your information.",
+						[{ text: "OK", style: "default" }],
+					);
+				} else {
+					navigation.navigate("EditProfile");
+				}
+			},
 		},
 		{
 			icon: "calendar-outline",
@@ -141,52 +155,43 @@ export default function ProfileScreen({ navigation }: Props) {
 					style={[styles.statsContainer, isDark && styles.statsContainerDark]}
 				>
 					<View style={styles.statItem}>
-						{isLoadingStats ? (
+						{isLoadingStats ?
 							<ActivityIndicator
 								size="small"
 								color={isDark ? Colors.primary[200] : Colors.primary[500]}
 							/>
-						) : (
-							<Text
-								style={[styles.statNumber, isDark && styles.statNumberDark]}
-							>
+						:	<Text style={[styles.statNumber, isDark && styles.statNumberDark]}>
 								{userStats.totalBookings}
 							</Text>
-						)}
+						}
 						<Text style={[styles.statLabel, isDark && styles.statLabelDark]}>
 							Total Bookings
 						</Text>
 					</View>
 					<View style={styles.statItem}>
-						{isLoadingStats ? (
+						{isLoadingStats ?
 							<ActivityIndicator
 								size="small"
 								color={isDark ? Colors.primary[200] : Colors.primary[500]}
 							/>
-						) : (
-							<Text
-								style={[styles.statNumber, isDark && styles.statNumberDark]}
-							>
+						:	<Text style={[styles.statNumber, isDark && styles.statNumberDark]}>
 								{userStats.thisMonthBookings}
 							</Text>
-						)}
+						}
 						<Text style={[styles.statLabel, isDark && styles.statLabelDark]}>
 							This Month
 						</Text>
 					</View>
 					<View style={styles.statItem}>
-						{isLoadingStats ? (
+						{isLoadingStats ?
 							<ActivityIndicator
 								size="small"
 								color={isDark ? Colors.primary[200] : Colors.primary[500]}
 							/>
-						) : (
-							<Text
-								style={[styles.statNumber, isDark && styles.statNumberDark]}
-							>
+						:	<Text style={[styles.statNumber, isDark && styles.statNumberDark]}>
 								{userStats.averageRating.toFixed(1)}
 							</Text>
-						)}
+						}
 						<Text style={[styles.statLabel, isDark && styles.statLabelDark]}>
 							Rating
 						</Text>

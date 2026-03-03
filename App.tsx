@@ -20,11 +20,9 @@ export default function App() {
 			// Validate environment variables
 			const envValid = validateEnvironment();
 			if (!envValid) {
-				Alert.alert(
-					"Configuration Error",
-					"Missing required environment variables. Please check your .env file.",
+				console.warn(
+					"Missing required environment variables. Check your .env file.",
 				);
-				return;
 			}
 
 			// Initialize Supabase on app startup

@@ -52,6 +52,17 @@ export default function EditProfileScreen({ navigation }: Props) {
 	const { isDark } = useTheme();
 	const insets = useSafeAreaInsets();
 
+	// Block faculty from editing profile
+	useEffect(() => {
+		if (user?.role === "faculty") {
+			Alert.alert(
+				"Profile Edit Restricted",
+				"Faculty members cannot edit their profile directly. Please contact the admin to update your information.",
+				[{ text: "OK", onPress: () => navigation.goBack() }],
+			);
+		}
+	}, []);
+
 	const [profileData, setProfileData] = useState<ProfileData>({
 		name: user?.name || "",
 		email: user?.email || "",
@@ -92,7 +103,7 @@ export default function EditProfileScreen({ navigation }: Props) {
 				CommonActions.reset({
 					index: 0,
 					routes: [{ name: "MainTabs" }],
-				})
+				}),
 			);
 		}
 	};
@@ -187,13 +198,13 @@ export default function EditProfileScreen({ navigation }: Props) {
 				name: updates.name !== undefined ? updates.name : user.name,
 				phone: updates.phone !== undefined ? updates.phone : user.phone,
 				department:
-					updates.department !== undefined
-						? updates.department
-						: user.department,
+					updates.department !== undefined ?
+						updates.department
+					:	user.department,
 				employeeId:
-					updates.employee_id !== undefined
-						? updates.employee_id
-						: user.employeeId,
+					updates.employee_id !== undefined ?
+						updates.employee_id
+					:	user.employeeId,
 			};
 
 			await updateProfile(profileUpdateData);
@@ -207,9 +218,9 @@ export default function EditProfileScreen({ navigation }: Props) {
 		} catch (error) {
 			console.error("Error updating profile:", error);
 			const errorMessage =
-				error instanceof Error
-					? error.message
-					: "Failed to update profile. Please try again.";
+				error instanceof Error ?
+					error.message
+				:	"Failed to update profile. Please try again.";
 			Alert.alert("Error", errorMessage);
 		} finally {
 			setIsLoading(false);
@@ -235,7 +246,7 @@ export default function EditProfileScreen({ navigation }: Props) {
 						style: "destructive",
 						onPress: () => handleGoBack(),
 					},
-				]
+				],
 			);
 		} else {
 			handleGoBack();
@@ -255,7 +266,13 @@ export default function EditProfileScreen({ navigation }: Props) {
 			<StatusBar style={isDark ? "light" : "dark"} />
 
 			{/* Header */}
-			<View style={[styles.header, isDark && styles.headerDark, { paddingTop: insets.top + 12 }]}>
+			<View
+				style={[
+					styles.header,
+					isDark && styles.headerDark,
+					{ paddingTop: insets.top + 12 },
+				]}
+			>
 				<TouchableOpacity style={styles.backButton} onPress={handleCancel}>
 					<Ionicons
 						name="arrow-back"
@@ -439,13 +456,12 @@ export default function EditProfileScreen({ navigation }: Props) {
 						disabled={isLoading}
 						activeOpacity={0.8}
 					>
-						{isLoading ? (
+						{isLoading ?
 							<ActivityIndicator
 								size="small"
 								color={Colors.background.primary}
 							/>
-						) : (
-							<>
+						:	<>
 								<Ionicons
 									name="checkmark-circle-outline"
 									size={20}
@@ -454,7 +470,7 @@ export default function EditProfileScreen({ navigation }: Props) {
 								/>
 								<Text style={styles.bottomSaveButtonText}>Save Changes</Text>
 							</>
-						)}
+						}
 					</TouchableOpacity>
 
 					<TouchableOpacity
