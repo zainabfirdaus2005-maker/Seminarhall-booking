@@ -1,55 +1,60 @@
 {
-	"expo": {
-		"name": "MACET Seminar Hall Booking",
-		"slug": "macet-seminar-hall-booking",
-		"version": "1.0.0",
-		"orientation": "portrait",
-		"icon": "./assets/icon.png",
-		"userInterfaceStyle": "light",
-		"newArchEnabled": true,
-		"scheme": "seminarhallbooking",
-		"web": {
-			"favicon": "./assets/favicon.png",
-			"bundler": "metro"
-		},
-		"splash": {
-			"image": "./assets/splash-icon.png",
-			"resizeMode": "contain",
-			"backgroundColor": "#ffffff"
-		},
-		"ios": {
-			"supportsTablet": true,
-			"bundleIdentifier": "com.cypherninja.seminarhallbooking"
-		},
-		"android": {
-			"adaptiveIcon": {
-				"foregroundImage": "./assets/adaptive-icon.png",
-				"backgroundColor": "#ffffff"
-			},
-			"edgeToEdgeEnabled": true,
-			"package": "com.cypherninja.seminarhallbooking",
-			"permissions": ["RECEIVE_BOOT_COMPLETED", "VIBRATE", "WAKE_LOCK"]
-		},
-		"notification": {
-			"icon": "./assets/icon.png",
-			"color": "#3b82f6",
-			"androidMode": "default",
-			"androidCollapsedTitle": "MACET Seminar Hall Booking"
-		},
-		"plugins": [
-			[
-				"expo-notifications",
-				{
-					"icon": "./assets/icon.png",
-					"color": "#3b82f6",
-					"defaultChannel": "default"
-				}
-			]
-		],
-		"extra": {
-			"eas": {
-				"projectId": ""
-			}
-		}
-	}
+  "expo": {
+    "name": "MACET Seminar Hall Booking",
+    "slug": "macet-seminar-hall-booking",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "scheme": "seminarhallbooking",
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.cypherninja.seminarhallbooking"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.cypherninja.seminarhallbooking",
+      "permissions": [
+        "RECEIVE_BOOT_COMPLETED",
+        "VIBRATE",
+        "WAKE_LOCK"
+      ]
+    },
+    "notification": {
+      "icon": "./assets/icon.png",
+      "color": "#3b82f6",
+      "androidMode": "default",
+      "androidCollapsedTitle": "MACET Seminar Hall Booking"
+    },
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/icon.png",
+          "color": "#3b82f6",
+          "defaultChannel": "default"
+        }
+      ],
+      "expo-font"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": ""
+      }
+    }
+  }
 }
