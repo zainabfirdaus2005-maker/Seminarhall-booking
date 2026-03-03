@@ -161,6 +161,28 @@ const formatTimeForDisplay = (timeString: string): string => {
 	return timeString;
 };
 
+type BookingFilterType =
+	| "all"
+	| "pending"
+	| "approved"
+	| "rejected"
+	| "cancelled"
+	| "completed";
+
+/** Parse DDMMYYYY or YYYY-MM-DD into a numeric value for comparison (YYYYMMDD) */
+const parseDateToComparable = (dateString: string): number => {
+	if (!dateString) return 0;
+	if (dateString.includes("-")) {
+		// YYYY-MM-DD
+		return parseInt(dateString.replace(/-/g, ""), 10);
+	}
+	// DDMMYYYY -> YYYYMMDD
+	const day = dateString.substring(0, 2);
+	const month = dateString.substring(2, 4);
+	const year = dateString.substring(4, 8);
+	return parseInt(`${year}${month}${day}`, 10);
+};
+
 const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 	const { user } = useAuthStore();
 	const { isDark } = useTheme();
@@ -257,10 +279,13 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 	const [halls, setHalls] = useState<any[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [refreshing, setRefreshing] = useState(false);
+	const [selectedFilter, setSelectedFilter] =
+		useState<BookingFilterType>("all");
+	const [showFilterMenu, setShowFilterMenu] = useState(false);
 	const [showCreateModal, setShowCreateModal] = useState(false);
 	const [showEditModal, setShowEditModal] = useState(false);
 	const [editingBooking, setEditingBooking] = useState<SmartBooking | null>(
-		null
+		null,
 	);
 	const [creating, setCreating] = useState(false);
 	const [updating, setUpdating] = useState(false);
@@ -308,7 +333,15 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 				hallManagementService.getAllHalls(),
 			]);
 
-			setBookings(bookingsData);
+			// Sort bookings: latest first by actual date, then by start_time
+			const sortedBookings = [...bookingsData].sort((a, b) => {
+				const dateA = parseDateToComparable(a.booking_date);
+				const dateB = parseDateToComparable(b.booking_date);
+				if (dateB !== dateA) return dateB - dateA;
+				// Same date - sort by start_time descending
+				return (b.start_time || "").localeCompare(a.start_time || "");
+			});
+			setBookings(sortedBookings);
 			setHalls(hallsData);
 		} catch (error) {
 			console.error("Error fetching data:", error);
@@ -321,7 +354,7 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 	useFocusEffect(
 		useCallback(() => {
 			fetchData();
-		}, [fetchData])
+		}, [fetchData]),
 	);
 
 	// Animation effect for floating action button
@@ -363,7 +396,7 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 				formData.booking_date,
 				formData.start_time,
 				formData.end_time,
-				editingBooking?.id
+				editingBooking?.id,
 			);
 			setAvailabilityCheck(result);
 		} catch (error) {
@@ -384,7 +417,7 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 			setLoadingBookedSlots(true);
 			const result = await smartBookingService.getBookingsForHallAndDate(
 				hallId,
-				bookingDate
+				bookingDate,
 			);
 
 			// Filter to only show future bookings and approved/pending ones
@@ -396,7 +429,7 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 					parseInt(bookingDate.substring(2, 4)) - 1, // month (0-indexed)
 					parseInt(bookingDate.substring(0, 2)), // day
 					hours,
-					minutes
+					minutes,
 				);
 
 				return (
@@ -440,7 +473,7 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 			await smartBookingService.updateBooking(
 				editingBooking.id,
 				formData,
-				user.id
+				user.id,
 			);
 			Alert.alert("Success", "Booking updated successfully!");
 			setShowEditModal(false);
@@ -457,8 +490,10 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 
 	const handleCancelBooking = (booking: SmartBooking) => {
 		// Web-compatible confirmation
-		if (Platform.OS === 'web') {
-			const confirmed = window.confirm("Are you sure you want to cancel this booking?");
+		if (Platform.OS === "web") {
+			const confirmed = window.confirm(
+				"Are you sure you want to cancel this booking?",
+			);
 			if (confirmed) {
 				cancelBookingAsync(booking);
 			}
@@ -473,7 +508,7 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 						style: "destructive",
 						onPress: () => cancelBookingAsync(booking),
 					},
-				]
+				],
 			);
 		}
 	};
@@ -481,18 +516,18 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 	const cancelBookingAsync = async (booking: SmartBooking) => {
 		try {
 			await smartBookingService.cancelBooking(booking.id, user!.id);
-			
-			if (Platform.OS === 'web') {
+
+			if (Platform.OS === "web") {
 				window.alert("Booking cancelled successfully");
 			} else {
 				Alert.alert("Success", "Booking cancelled successfully");
 			}
-			
+
 			await fetchData();
 		} catch (error: any) {
 			console.error("Cancel booking error:", error);
-			
-			if (Platform.OS === 'web') {
+
+			if (Platform.OS === "web") {
 				window.alert("Error: " + (error.message || "Failed to cancel booking"));
 			} else {
 				Alert.alert("Error", error.message || "Failed to cancel booking");
@@ -548,6 +583,56 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 		navigation.navigate("BookingForm", {});
 	};
 
+	// Filter bookings based on selected filter
+	const filteredBookings =
+		selectedFilter === "all" ? bookings : (
+			bookings.filter((b) => b.status === selectedFilter)
+		);
+
+	const filterOptions: {
+		key: BookingFilterType;
+		label: string;
+		icon: keyof typeof Ionicons.glyphMap;
+		color: string;
+	}[] = [
+		{
+			key: "all",
+			label: "All",
+			icon: "list-outline",
+			color: theme.colors.primary,
+		},
+		{
+			key: "pending",
+			label: "Pending",
+			icon: "time-outline",
+			color: theme.colors.warning,
+		},
+		{
+			key: "approved",
+			label: "Approved",
+			icon: "checkmark-circle-outline",
+			color: theme.colors.success,
+		},
+		{
+			key: "completed",
+			label: "Completed",
+			icon: "checkmark-done-circle-outline",
+			color: "#6366f1",
+		},
+		{
+			key: "rejected",
+			label: "Rejected",
+			icon: "close-circle-outline",
+			color: theme.colors.error,
+		},
+		{
+			key: "cancelled",
+			label: "Cancelled",
+			icon: "ban-outline",
+			color: theme.colors.text.secondary,
+		},
+	];
+
 	if (loading) {
 		return (
 			<View style={styles.container}>
@@ -565,7 +650,80 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 			<StatusBar style="auto" />
 			<View style={styles.header}>
 				<Text style={styles.headerTitle}>My Bookings</Text>
+				<TouchableOpacity
+					style={[
+						styles.filterToggleButton,
+						showFilterMenu && { backgroundColor: theme.colors.primary + "20" },
+					]}
+					onPress={() => {
+						setShowFilterMenu(!showFilterMenu);
+						Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+					}}
+					activeOpacity={0.7}
+				>
+					<Ionicons
+						name="filter"
+						size={20}
+						color={
+							showFilterMenu ?
+								theme.colors.primary
+							:	dynamicTheme.colors.text.secondary
+						}
+					/>
+					{selectedFilter !== "all" && <View style={styles.filterActiveDot} />}
+				</TouchableOpacity>
 			</View>
+
+			{/* Filter chips row */}
+			{showFilterMenu && (
+				<ScrollView
+					horizontal
+					showsHorizontalScrollIndicator={false}
+					style={styles.filterChipsContainer}
+					contentContainerStyle={styles.filterChipsContent}
+				>
+					{filterOptions.map((filter) => {
+						const isActive = selectedFilter === filter.key;
+						const count =
+							filter.key === "all" ?
+								bookings.length
+							:	bookings.filter((b) => b.status === filter.key).length;
+						return (
+							<TouchableOpacity
+								key={filter.key}
+								style={[
+									styles.filterChip,
+									isActive && {
+										backgroundColor: filter.color + "20",
+										borderColor: filter.color,
+									},
+								]}
+								onPress={() => {
+									setSelectedFilter(filter.key);
+									Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+								}}
+								activeOpacity={0.7}
+							>
+								<Ionicons
+									name={filter.icon}
+									size={14}
+									color={
+										isActive ? filter.color : dynamicTheme.colors.text.secondary
+									}
+								/>
+								<Text
+									style={[
+										styles.filterChipText,
+										isActive && { color: filter.color, fontWeight: "600" },
+									]}
+								>
+									{filter.label} ({count})
+								</Text>
+							</TouchableOpacity>
+						);
+					})}
+				</ScrollView>
+			)}
 
 			<View style={styles.scrollViewWrapper}>
 				<ScrollView
@@ -574,206 +732,233 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 					refreshControl={
 						<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
 					}
-					showsVerticalScrollIndicator={Platform.OS !== 'web'}
+					showsVerticalScrollIndicator={Platform.OS !== "web"}
 					nestedScrollEnabled={true}
 					keyboardShouldPersistTaps="handled"
 					scrollEnabled={true}
-					bounces={Platform.OS !== 'web'}
+					bounces={Platform.OS !== "web"}
 				>
-				{bookings.map((booking) => (
-					<View key={booking.id} style={styles.bookingCard}>
-						<View style={styles.bookingHeader}>
-							<View style={styles.bookingTitleRow}>
-								<Text style={styles.hallName} numberOfLines={1}>
-									{booking.hall_name || "Unknown Hall"}
-								</Text>
-								<View
-									style={[
-										styles.statusBadge,
-										{ backgroundColor: getStatusColor(booking.status) },
-									]}
-								>
+					{filteredBookings.map((booking) => (
+						<View key={booking.id} style={styles.bookingCard}>
+							<View style={styles.bookingHeader}>
+								<View style={styles.bookingTitleRow}>
+									<Text style={styles.hallName} numberOfLines={1}>
+										{booking.hall_name || "Unknown Hall"}
+									</Text>
+									<View
+										style={[
+											styles.statusBadge,
+											{ backgroundColor: getStatusColor(booking.status) },
+										]}
+									>
+										<Ionicons
+											name={getStatusIcon(booking.status)}
+											size={14}
+											color={theme.colors.surface}
+										/>
+										<Text style={styles.statusText}>
+											{booking.status.charAt(0).toUpperCase() +
+												booking.status.slice(1)}
+										</Text>
+									</View>
+								</View>
+								{booking.auto_approved && (
+									<View style={styles.autoApprovedBadge}>
+										<Ionicons
+											name="flash"
+											size={12}
+											color={theme.colors.warning}
+										/>
+										<Text style={styles.autoApprovedText}>Auto-approved</Text>
+									</View>
+								)}
+							</View>
+
+							<View style={styles.bookingDetails}>
+								<View style={styles.detailRow}>
 									<Ionicons
-										name={getStatusIcon(booking.status)}
-										size={14}
-										color={theme.colors.surface}
+										name="calendar"
+										size={16}
+										color={theme.colors.text.secondary}
 									/>
-									<Text style={styles.statusText}>
-										{booking.status.charAt(0).toUpperCase() +
-											booking.status.slice(1)}
+									<Text style={styles.detailText}>
+										{formatDate(booking.booking_date)}
 									</Text>
 								</View>
-							</View>
-							{booking.auto_approved && (
-								<View style={styles.autoApprovedBadge}>
+								<View style={styles.detailRow}>
 									<Ionicons
-										name="flash"
-										size={12}
-										color={theme.colors.warning}
-									/>
-									<Text style={styles.autoApprovedText}>Auto-approved</Text>
-								</View>
-							)}
-						</View>
-
-						<View style={styles.bookingDetails}>
-							<View style={styles.detailRow}>
-								<Ionicons
-									name="calendar"
-									size={16}
-									color={theme.colors.text.secondary}
-								/>
-								<Text style={styles.detailText}>
-									{formatDate(booking.booking_date)}
-								</Text>
-							</View>
-							<View style={styles.detailRow}>
-								<Ionicons
-									name="time"
-									size={16}
-									color={theme.colors.text.secondary}
-								/>
-								<Text style={styles.detailText}>
-									{formatTime(booking.start_time)} -{" "}
-									{formatTime(booking.end_time)}
-								</Text>
-								<Text style={styles.durationText}>
-									({booking.duration_minutes} min)
-								</Text>
-							</View>
-							<View style={styles.detailRow}>
-								<Ionicons
-									name="people"
-									size={16}
-									color={theme.colors.text.secondary}
-								/>
-								<Text style={styles.detailText}>
-									{booking.attendees_count} attendees
-								</Text>
-							</View>
-							<View style={styles.detailRow}>
-								<Ionicons
-									name="bookmark"
-									size={16}
-									color={theme.colors.text.secondary}
-								/>
-								<Text style={styles.detailText} numberOfLines={1}>
-									{booking.purpose}
-								</Text>
-							</View>
-
-							{/* Admin Action Details */}
-							{(booking.status === "approved" ||
-								booking.status === "rejected" ||
-								booking.status === "cancelled") && (
-								<View style={styles.adminActionSection}>
-									{booking.status === "approved" && booking.approved_at && (
-										<View style={styles.adminDetailRow}>
-											<Ionicons
-												name="checkmark-circle"
-												size={14}
-												color={theme.colors.success}
-											/>
-											<Text style={styles.adminActionText}>
-												Approved{" "}
-												{new Date(booking.approved_at).toLocaleDateString()}
-											</Text>
-										</View>
-									)}
-									{booking.status === "rejected" && booking.rejected_reason && (
-										<View style={styles.adminDetailRow}>
-											<Ionicons
-												name="close-circle"
-												size={14}
-												color={theme.colors.error}
-											/>
-											<Text style={styles.adminActionText}>
-												Rejected: {booking.rejected_reason}
-											</Text>
-										</View>
-									)}
-									{booking.status === "cancelled" && (
-										<View style={styles.adminDetailRow}>
-											<Ionicons
-												name="ban"
-												size={14}
-												color={theme.colors.error}
-											/>
-											<Text style={styles.adminActionText}>
-												Cancelled{" "}
-												{booking.rejected_reason
-													? `: ${booking.rejected_reason}`
-													: ""}
-											</Text>
-										</View>
-									)}
-									{booking.admin_notes && (
-										<View style={styles.adminDetailRow}>
-											<Ionicons
-												name="chatbox"
-												size={14}
-												color={theme.colors.text.secondary}
-											/>
-											<Text style={styles.adminNotesText} numberOfLines={2}>
-												Note: {booking.admin_notes}
-											</Text>
-										</View>
-									)}
-								</View>
-							)}
-						</View>
-
-						{booking.status === "pending" || booking.status === "approved" ? (
-							<View style={styles.bookingActions}>
-								<TouchableOpacity
-									style={[styles.actionButton, styles.editButton]}
-									onPress={() => openEditModal(booking)}
-									activeOpacity={0.7}
-									disabled={false}
-								>
-									<Ionicons
-										name="pencil"
+										name="time"
 										size={16}
-										color={theme.colors.primary}
+										color={theme.colors.text.secondary}
 									/>
-									<Text style={styles.editButtonText}>Edit</Text>
-								</TouchableOpacity>
-								<TouchableOpacity
-									style={[styles.actionButton, styles.cancelButton]}
-									onPress={() => handleCancelBooking(booking)}
-									activeOpacity={0.7}
-									hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-								>
-									<Ionicons name="close" size={16} color={theme.colors.error} />
-									<Text style={styles.cancelButtonText}>Cancel</Text>
-								</TouchableOpacity>
-							</View>
-						) : null}
-					</View>
-				))}
+									<Text style={styles.detailText}>
+										{formatTime(booking.start_time)} -{" "}
+										{formatTime(booking.end_time)}
+									</Text>
+									<Text style={styles.durationText}>
+										({booking.duration_minutes} min)
+									</Text>
+								</View>
+								<View style={styles.detailRow}>
+									<Ionicons
+										name="people"
+										size={16}
+										color={theme.colors.text.secondary}
+									/>
+									<Text style={styles.detailText}>
+										{booking.attendees_count} attendees
+									</Text>
+								</View>
+								<View style={styles.detailRow}>
+									<Ionicons
+										name="bookmark"
+										size={16}
+										color={theme.colors.text.secondary}
+									/>
+									<Text style={styles.detailText} numberOfLines={1}>
+										{booking.purpose}
+									</Text>
+								</View>
 
-				{bookings.length === 0 && (
-					<View style={styles.emptyState}>
-						<Ionicons
-							name="calendar-outline"
-							size={64}
-							color={theme.colors.text.secondary}
-						/>
-						<Text style={styles.emptyTitle}>No Bookings Yet</Text>
-						<Text style={styles.emptyMessage}>
-							Create your first booking to get started
-						</Text>
-						<TouchableOpacity
-							style={styles.emptyButton}
-							onPress={() => {
-								navigation.navigate("BookingForm", {});
-							}}
-						>
-							<Text style={styles.emptyButtonText}>Create Booking</Text>
-						</TouchableOpacity>
-					</View>
-				)}
-			</ScrollView>
+								{/* Admin Action Details */}
+								{(booking.status === "approved" ||
+									booking.status === "rejected" ||
+									booking.status === "cancelled") && (
+									<View style={styles.adminActionSection}>
+										{booking.status === "approved" && booking.approved_at && (
+											<View style={styles.adminDetailRow}>
+												<Ionicons
+													name="checkmark-circle"
+													size={14}
+													color={theme.colors.success}
+												/>
+												<Text style={styles.adminActionText}>
+													Approved{" "}
+													{new Date(booking.approved_at).toLocaleDateString()}
+												</Text>
+											</View>
+										)}
+										{booking.status === "rejected" &&
+											booking.rejected_reason && (
+												<View style={styles.adminDetailRow}>
+													<Ionicons
+														name="close-circle"
+														size={14}
+														color={theme.colors.error}
+													/>
+													<Text style={styles.adminActionText}>
+														Rejected: {booking.rejected_reason}
+													</Text>
+												</View>
+											)}
+										{booking.status === "cancelled" && (
+											<View style={styles.adminDetailRow}>
+												<Ionicons
+													name="ban"
+													size={14}
+													color={theme.colors.error}
+												/>
+												<Text style={styles.adminActionText}>
+													Cancelled{" "}
+													{booking.rejected_reason ?
+														`: ${booking.rejected_reason}`
+													:	""}
+												</Text>
+											</View>
+										)}
+										{booking.admin_notes && (
+											<View style={styles.adminDetailRow}>
+												<Ionicons
+													name="chatbox"
+													size={14}
+													color={theme.colors.text.secondary}
+												/>
+												<Text style={styles.adminNotesText} numberOfLines={2}>
+													Note: {booking.admin_notes}
+												</Text>
+											</View>
+										)}
+									</View>
+								)}
+							</View>
+
+							{booking.status === "pending" || booking.status === "approved" ?
+								<View style={styles.bookingActions}>
+									<TouchableOpacity
+										style={[styles.actionButton, styles.editButton]}
+										onPress={() => openEditModal(booking)}
+										activeOpacity={0.7}
+										disabled={false}
+									>
+										<Ionicons
+											name="pencil"
+											size={16}
+											color={theme.colors.primary}
+										/>
+										<Text style={styles.editButtonText}>Edit</Text>
+									</TouchableOpacity>
+									<TouchableOpacity
+										style={[styles.actionButton, styles.cancelButton]}
+										onPress={() => handleCancelBooking(booking)}
+										activeOpacity={0.7}
+										hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+									>
+										<Ionicons
+											name="close"
+											size={16}
+											color={theme.colors.error}
+										/>
+										<Text style={styles.cancelButtonText}>Cancel</Text>
+									</TouchableOpacity>
+								</View>
+							:	null}
+						</View>
+					))}
+
+					{filteredBookings.length === 0 && bookings.length > 0 && (
+						<View style={styles.emptyState}>
+							<Ionicons
+								name="filter-outline"
+								size={64}
+								color={theme.colors.text.secondary}
+							/>
+							<Text style={styles.emptyTitle}>
+								No {selectedFilter} bookings
+							</Text>
+							<Text style={styles.emptyMessage}>
+								Try changing the filter to see other bookings
+							</Text>
+							<TouchableOpacity
+								style={styles.emptyButton}
+								onPress={() => setSelectedFilter("all")}
+							>
+								<Text style={styles.emptyButtonText}>Show All</Text>
+							</TouchableOpacity>
+						</View>
+					)}
+
+					{bookings.length === 0 && (
+						<View style={styles.emptyState}>
+							<Ionicons
+								name="calendar-outline"
+								size={64}
+								color={theme.colors.text.secondary}
+							/>
+							<Text style={styles.emptyTitle}>No Bookings Yet</Text>
+							<Text style={styles.emptyMessage}>
+								Create your first booking to get started
+							</Text>
+							<TouchableOpacity
+								style={styles.emptyButton}
+								onPress={() => {
+									navigation.navigate("BookingForm", {});
+								}}
+							>
+								<Text style={styles.emptyButtonText}>Create Booking</Text>
+							</TouchableOpacity>
+						</View>
+					)}
+				</ScrollView>
 			</View>
 
 			{/* Create/Edit Booking Modal */}
@@ -882,12 +1067,12 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 										>
 											<LinearGradient
 												colors={
-													formData.hall_id === hall.id
-														? [
-																theme.colors.primary + "15",
-																theme.colors.primary + "10",
-														  ]
-														: ["transparent", "transparent"]
+													formData.hall_id === hall.id ?
+														[
+															theme.colors.primary + "15",
+															theme.colors.primary + "10",
+														]
+													:	["transparent", "transparent"]
 												}
 												style={styles.hallCardGradient}
 											>
@@ -906,9 +1091,9 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 															name="people-outline"
 															size={14}
 															color={
-																formData.hall_id === hall.id
-																	? theme.colors.primary
-																	: theme.colors.text.secondary
+																formData.hall_id === hall.id ?
+																	theme.colors.primary
+																:	theme.colors.text.secondary
 															}
 														/>
 														<Text
@@ -951,9 +1136,9 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 								style={styles.enhancedInput}
 								onPress={() => {
 									setTempDate(
-										formData.booking_date
-											? formatDateForInput(formData.booking_date)
-											: new Date()
+										formData.booking_date ?
+											formatDateForInput(formData.booking_date)
+										:	new Date(),
 									);
 									setShowDatePicker(true);
 									Haptics.selectionAsync();
@@ -973,9 +1158,9 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 											!formData.booking_date && styles.placeholderText,
 										]}
 									>
-										{formData.booking_date
-											? formatDate(formData.booking_date)
-											: "Select date"}
+										{formData.booking_date ?
+											formatDate(formData.booking_date)
+										:	"Select date"}
 									</Text>
 									<Ionicons
 										name="chevron-forward"
@@ -1114,15 +1299,13 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 											]}
 											style={styles.buttonGradient}
 										>
-											{checkingAvailability ? (
+											{checkingAvailability ?
 												<ActivityIndicator size="small" color="white" />
-											) : (
-												<Ionicons name="search" size={18} color="white" />
-											)}
+											:	<Ionicons name="search" size={18} color="white" />}
 											<Text style={styles.checkAvailabilityText}>
-												{checkingAvailability
-													? "Checking..."
-													: "Check Availability"}
+												{checkingAvailability ?
+													"Checking..."
+												:	"Check Availability"}
 											</Text>
 										</LinearGradient>
 									</TouchableOpacity>
@@ -1132,42 +1315,44 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 											style={[
 												styles.availabilityResult,
 												{
-													borderColor: availabilityCheck.is_available
-														? theme.colors.success
-														: theme.colors.error,
-													backgroundColor: availabilityCheck.is_available
-														? theme.colors.success + "10"
-														: theme.colors.error + "10",
+													borderColor:
+														availabilityCheck.is_available ?
+															theme.colors.success
+														:	theme.colors.error,
+													backgroundColor:
+														availabilityCheck.is_available ?
+															theme.colors.success + "10"
+														:	theme.colors.error + "10",
 												},
 											]}
 										>
 											<View style={styles.availabilityHeader}>
 												<Ionicons
 													name={
-														availabilityCheck.is_available
-															? "checkmark-circle"
-															: "close-circle"
+														availabilityCheck.is_available ? "checkmark-circle"
+														:	"close-circle"
 													}
 													size={20}
 													color={
-														availabilityCheck.is_available
-															? theme.colors.success
-															: theme.colors.error
+														availabilityCheck.is_available ?
+															theme.colors.success
+														:	theme.colors.error
 													}
 												/>
 												<Text
 													style={[
 														styles.availabilityText,
 														{
-															color: availabilityCheck.is_available
-																? theme.colors.success
-																: theme.colors.error,
+															color:
+																availabilityCheck.is_available ?
+																	theme.colors.success
+																:	theme.colors.error,
 														},
 													]}
 												>
-													{availabilityCheck.is_available
-														? "Available"
-														: "Not Available"}
+													{availabilityCheck.is_available ?
+														"Available"
+													:	"Not Available"}
 												</Text>
 											</View>
 
@@ -1209,7 +1394,7 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 																	</Text>
 																</View>
 															</View>
-														)
+														),
 													)}
 													<Text style={styles.conflictAdvice}>
 														💡 Please choose a different time slot or check the
@@ -1270,7 +1455,7 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 									)}
 								</View>
 
-								{bookedSlots.length > 0 ? (
+								{bookedSlots.length > 0 ?
 									<View style={styles.bookedSlotsContainer}>
 										<Text style={styles.bookedSlotsTitle}>
 											⏰ Already booked times ({bookedSlots.length} booking
@@ -1295,7 +1480,7 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 																styles.bookedSlotStatusBadge,
 																{
 																	backgroundColor: getStatusColor(
-																		booking.status
+																		booking.status,
 																	),
 																},
 															]}
@@ -1333,7 +1518,7 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 											</Text>
 										</View>
 									</View>
-								) : !loadingBookedSlots ? (
+								: !loadingBookedSlots ?
 									<View style={styles.noBookedSlotsContainer}>
 										<Ionicons
 											name="checkmark-circle-outline"
@@ -1344,7 +1529,7 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 											🎉 No bookings for this day! All time slots are available.
 										</Text>
 									</View>
-								) : null}
+								:	null}
 							</View>
 						)}
 
@@ -1447,17 +1632,23 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 										<View style={styles.capacityInfo}>
 											<Ionicons
 												name={
-													formData.attendees_count <=
-													halls.find((h) => h.id === formData.hall_id)?.capacity
-														? "checkmark-circle"
-														: "warning"
+													(
+														formData.attendees_count <=
+														halls.find((h) => h.id === formData.hall_id)
+															?.capacity
+													) ?
+														"checkmark-circle"
+													:	"warning"
 												}
 												size={16}
 												color={
-													formData.attendees_count <=
-													halls.find((h) => h.id === formData.hall_id)?.capacity
-														? theme.colors.success
-														: theme.colors.warning
+													(
+														formData.attendees_count <=
+														halls.find((h) => h.id === formData.hall_id)
+															?.capacity
+													) ?
+														theme.colors.success
+													:	theme.colors.warning
 												}
 											/>
 											<Text
@@ -1465,11 +1656,13 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 													styles.capacityText,
 													{
 														color:
-															formData.attendees_count <=
-															halls.find((h) => h.id === formData.hall_id)
-																?.capacity
-																? theme.colors.success
-																: theme.colors.warning,
+															(
+																formData.attendees_count <=
+																halls.find((h) => h.id === formData.hall_id)
+																	?.capacity
+															) ?
+																theme.colors.success
+															:	theme.colors.warning,
 													},
 												]}
 											>
@@ -1509,17 +1702,16 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 										<View style={styles.priorityContent}>
 											<Ionicons
 												name={
-													priority === "high"
-														? "chevron-up"
-														: priority === "medium"
-														? "remove"
-														: "chevron-down"
+													priority === "high" ? "chevron-up"
+													: priority === "medium" ?
+														"remove"
+													:	"chevron-down"
 												}
 												size={16}
 												color={
-													formData.priority === priority
-														? "white"
-														: theme.colors.text.secondary
+													formData.priority === priority ?
+														"white"
+													:	theme.colors.text.secondary
 												}
 											/>
 											<Text
@@ -1561,34 +1753,35 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 						>
 							<LinearGradient
 								colors={
-									!formData.hall_id ||
-									!formData.booking_date ||
-									!formData.purpose
-										? [theme.colors.text.secondary, theme.colors.text.secondary]
-										: [theme.colors.primary, theme.colors.primary + "DD"]
+									(
+										!formData.hall_id ||
+										!formData.booking_date ||
+										!formData.purpose
+									) ?
+										[theme.colors.text.secondary, theme.colors.text.secondary]
+									:	[theme.colors.primary, theme.colors.primary + "DD"]
 								}
 								style={styles.submitButtonGradient}
 							>
-								{creating || updating ? (
+								{creating || updating ?
 									<ActivityIndicator size="small" color="white" />
-								) : (
-									<>
+								:	<>
 										<Ionicons
 											name={showEditModal ? "checkmark" : "add"}
 											size={20}
 											color="white"
 										/>
 										<Text style={styles.submitButtonText}>
-											{showEditModal
-												? updating
-													? "Updating..."
-													: "Update Booking"
-												: creating
-												? "Creating..."
-												: "Create Booking"}
+											{showEditModal ?
+												updating ?
+													"Updating..."
+												:	"Update Booking"
+											: creating ?
+												"Creating..."
+											:	"Create Booking"}
 										</Text>
 									</>
-								)}
+								}
 							</LinearGradient>
 						</TouchableOpacity>
 					</View>
@@ -1677,7 +1870,9 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ navigation }) => {
 			<Animated.View
 				style={[
 					styles.fabContainer,
-					Platform.OS === 'web' ? ({ position: 'fixed' as any, zIndex: 10000 } as any) : {},
+					Platform.OS === "web" ?
+						({ position: "fixed" as any, zIndex: 10000 } as any)
+					:	{},
 					{
 						opacity: fadeAnim,
 						transform: [{ scale: scaleAnim }],
@@ -1707,7 +1902,7 @@ const createStyles = (dynamicTheme: any, insets: any) =>
 		container: {
 			flex: 1,
 			backgroundColor: dynamicTheme.colors.background,
-			position: 'relative',
+			position: "relative",
 		},
 		loadingContainer: {
 			flex: 1,
@@ -1727,38 +1922,88 @@ const createStyles = (dynamicTheme: any, insets: any) =>
 			backgroundColor: dynamicTheme.colors.surface,
 			borderBottomWidth: 1,
 			borderBottomColor: dynamicTheme.colors.text.secondary + "20",
-			...(Platform.OS === 'web' && {
-				position: 'sticky',
-				top: 0,
-				zIndex: 100,
-			} as any),
+			flexDirection: "row",
+			justifyContent: "space-between",
+			alignItems: "center",
+			...(Platform.OS === "web" &&
+				({
+					position: "sticky",
+					top: 0,
+					zIndex: 100,
+				} as any)),
 		},
 		headerTitle: {
 			fontSize: 28,
 			fontWeight: "bold",
 			color: dynamicTheme.colors.text.primary,
 		},
+		filterToggleButton: {
+			width: 40,
+			height: 40,
+			borderRadius: 20,
+			justifyContent: "center",
+			alignItems: "center",
+			position: "relative",
+		},
+		filterActiveDot: {
+			position: "absolute",
+			top: 6,
+			right: 6,
+			width: 8,
+			height: 8,
+			borderRadius: 4,
+			backgroundColor: theme.colors.primary,
+		},
+		filterChipsContainer: {
+			backgroundColor: dynamicTheme.colors.surface,
+			borderBottomWidth: 1,
+			borderBottomColor: dynamicTheme.colors.text.secondary + "10",
+			maxHeight: 52,
+		},
+		filterChipsContent: {
+			paddingHorizontal: dynamicTheme.spacing.md,
+			paddingVertical: dynamicTheme.spacing.sm,
+			gap: 8,
+			flexDirection: "row",
+			alignItems: "center",
+		},
+		filterChip: {
+			flexDirection: "row",
+			alignItems: "center",
+			paddingHorizontal: 12,
+			paddingVertical: 6,
+			borderRadius: 16,
+			borderWidth: 1,
+			borderColor: dynamicTheme.colors.text.secondary + "30",
+			gap: 4,
+		},
+		filterChipText: {
+			fontSize: 13,
+			color: dynamicTheme.colors.text.secondary,
+		},
 		scrollViewWrapper: {
 			flex: 1,
 			minHeight: 0,
-			...(Platform.OS === 'web' && {
-				overflow: 'auto',
-				height: '100%',
-			} as any),
+			...(Platform.OS === "web" &&
+				({
+					overflow: "auto",
+					height: "100%",
+				} as any)),
 		},
 		scrollView: {
 			flex: 1,
-			...(Platform.OS === 'web' && {
-				maxHeight: '100vh',
-				overflowY: 'scroll',
-				WebkitOverflowScrolling: 'touch',
-			} as any),
+			...(Platform.OS === "web" &&
+				({
+					maxHeight: "100vh",
+					overflowY: "scroll",
+					WebkitOverflowScrolling: "touch",
+				} as any)),
 		},
 		scrollContent: {
 			padding: dynamicTheme.spacing.md,
 			paddingBottom: 100,
 			flexGrow: 1,
-			minHeight: Platform.OS === 'web' ? 'auto' : undefined,
+			minHeight: Platform.OS === "web" ? "auto" : undefined,
 		},
 		bookingCard: {
 			backgroundColor: dynamicTheme.colors.surface,
@@ -1770,9 +2015,10 @@ const createStyles = (dynamicTheme: any, insets: any) =>
 			shadowOpacity: 0.1,
 			shadowRadius: 4,
 			elevation: 3,
-			...(Platform.OS === 'web' && {
-				boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-			} as any),
+			...(Platform.OS === "web" &&
+				({
+					boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+				} as any)),
 		},
 		bookingHeader: {
 			marginBottom: dynamicTheme.spacing.sm,
@@ -1845,9 +2091,10 @@ const createStyles = (dynamicTheme: any, insets: any) =>
 			flexDirection: "row",
 			marginTop: dynamicTheme.spacing.md,
 			gap: dynamicTheme.spacing.sm,
-			...(Platform.OS === 'web' && {
-				pointerEvents: 'auto',
-			} as any),
+			...(Platform.OS === "web" &&
+				({
+					pointerEvents: "auto",
+				} as any)),
 		},
 		actionButton: {
 			flex: 1,
@@ -1858,10 +2105,11 @@ const createStyles = (dynamicTheme: any, insets: any) =>
 			justifyContent: "center",
 			gap: dynamicTheme.spacing.xs,
 			minHeight: 40,
-			...(Platform.OS === 'web' && {
-				cursor: 'pointer',
-				userSelect: 'none',
-			} as any),
+			...(Platform.OS === "web" &&
+				({
+					cursor: "pointer",
+					userSelect: "none",
+				} as any)),
 		},
 		editButton: {
 			backgroundColor: theme.colors.primary,
@@ -1875,16 +2123,17 @@ const createStyles = (dynamicTheme: any, insets: any) =>
 			backgroundColor: theme.colors.error,
 			borderWidth: 1,
 			borderColor: theme.colors.error,
-			...(Platform.OS === 'web' && {
-				'&:hover': {
-					backgroundColor: theme.colors.error + 'DD',
-					transform: 'scale(1.05)',
-				},
-				'&:active': {
-					backgroundColor: theme.colors.error + 'BB',
-					transform: 'scale(0.95)',
-				},
-			} as any),
+			...(Platform.OS === "web" &&
+				({
+					"&:hover": {
+						backgroundColor: theme.colors.error + "DD",
+						transform: "scale(1.05)",
+					},
+					"&:active": {
+						backgroundColor: theme.colors.error + "BB",
+						transform: "scale(0.95)",
+					},
+				} as any)),
 		},
 		cancelButtonText: {
 			color: "white",
@@ -1969,10 +2218,11 @@ const createStyles = (dynamicTheme: any, insets: any) =>
 			shadowOpacity: 0.3,
 			shadowRadius: 8,
 			zIndex: 1001,
-			...(Platform.OS === 'web' && {
-				cursor: 'pointer',
-				boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
-			} as any),
+			...(Platform.OS === "web" &&
+				({
+					cursor: "pointer",
+					boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+				} as any)),
 		},
 		fabGradient: {
 			width: 60,
@@ -2240,9 +2490,10 @@ const createStyles = (dynamicTheme: any, insets: any) =>
 			right: 20,
 			zIndex: 1000,
 			elevation: 10,
-			...(Platform.OS === 'web' && {
-				position: 'fixed',
-			} as any),
+			...(Platform.OS === "web" &&
+				({
+					position: "fixed",
+				} as any)),
 		},
 		// Enhanced Form Styles
 		progressIndicator: {
