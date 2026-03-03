@@ -1,4 +1,4 @@
-# 📋 Finalized Requirements - Amity University Seminar Hall Booking App
+# 📋 Finalized Requirements - MACET Seminar Hall Booking App
 
 ## ✅ **Confirmed Technology Stack**
 

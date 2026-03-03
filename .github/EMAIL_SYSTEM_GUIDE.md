@@ -2,7 +2,7 @@
 
 ## 🎯 Overview
 
-This document provides a complete implementation guide for the email confirmation system in the Amity University Seminar Hall Booking App for Expo React Native, covering both SendGrid and Gmail SMTP options.
+This document provides a complete implementation guide for the email confirmation system in the MACET Seminar Hall Booking App for Expo React Native, covering both SendGrid and Gmail SMTP options.
 
 ---
 
@@ -31,7 +31,7 @@ This document provides a complete implementation guide for the email confirmatio
 
 #### Prerequisites
 
-1. **Gmail Account** - Use institutional email (admin@amity.edu)
+1. **Gmail Account** - Use institutional email (admin@macet.edu)
 2. **App Password** - Enable 2FA and create app-specific password
 3. **Less Secure Apps** - Enable if using regular password (not recommended)
 
@@ -45,10 +45,10 @@ npm install nodemailer @types/nodemailer
 
 ```typescript
 // .env.local
-GMAIL_USER=admin@amity.edu
+GMAIL_USER=admin@macet.edu
 GMAIL_APP_PASSWORD=your_16_character_app_password
-GMAIL_FROM_NAME=Amity University Patna
-GMAIL_REPLY_TO=admin@amity.edu
+GMAIL_FROM_NAME=Maulana Azad College Of Engineering & Technology
+GMAIL_REPLY_TO=admin@macet.edu
 ```
 
 #### Gmail SMTP Client Setup
@@ -73,7 +73,7 @@ export const gmailTransporter = nodemailer.createTransporter({
 export const EMAIL_CONFIG = {
 	from: `${process.env.GMAIL_FROM_NAME} <${process.env.GMAIL_USER}>`,
 	replyTo: process.env.GMAIL_REPLY_TO || process.env.GMAIL_USER,
-	baseUrl: process.env.EXPO_PUBLIC_APP_URL || "https://amity-booking.app",
+	baseUrl: process.env.EXPO_PUBLIC_APP_URL || "https://macet-booking.app",
 };
 
 // Verify connection
@@ -173,7 +173,7 @@ export class GmailEmailService {
 		hall: SeminarHall,
 		faculty: Profile
 	) {
-		const subject = `✅ Booking Confirmed - ${hall.name} | Amity University Patna`;
+		const subject = `✅ Booking Confirmed - ${hall.name} | Maulana Azad College Of Engineering & Technology`;
 		const html = this.generateBookingConfirmationHTML({
 			facultyName: faculty.fullName,
 			booking,
@@ -216,7 +216,7 @@ export class GmailEmailService {
 		faculty: Profile,
 		reason?: string
 	) {
-		const subject = `❌ Booking Cancelled - ${hall.name} | Amity University Patna`;
+		const subject = `❌ Booking Cancelled - ${hall.name} | Maulana Azad College Of Engineering & Technology`;
 		const html = this.generateBookingCancellationHTML({
 			facultyName: faculty.fullName,
 			booking,
@@ -273,7 +273,7 @@ export class GmailEmailService {
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <div class="logo">🏛️ Amity University Patna</div>
+            <div class="logo">🏛️ Maulana Azad College Of Engineering & Technology</div>
             <h1>Seminar Hall Booking System</h1>
         </div>
 
@@ -388,13 +388,13 @@ export class GmailEmailService {
             For support, contact us at ${EMAIL_CONFIG.replyTo}
             
             <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e5e7eb;">
-                <strong>Amity University Patna</strong><br>
+                <strong>Maulana Azad College Of Engineering & Technology</strong><br>
                 Campus Address, Patna, Bihar<br>
-                Phone: +91-XXXX-XXXXXX | Email: info@amity.edu
+                Phone: +91-XXXX-XXXXXX | Email: info@macet.edu
             </div>
             
             <div style="margin-top: 15px; color: #9ca3af; font-size: 12px;">
-                © 2025 Amity University Patna. All rights reserved.
+                © 2025 Maulana Azad College Of Engineering & Technology. All rights reserved.
             </div>
         </div>
     </div>
@@ -438,7 +438,7 @@ export class GmailEmailService {
     <div class="container">
         <div class="header">
             <div style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">🔔 Booking Reminder</div>
-            <h1>Amity University Patna</h1>
+            <h1>Maulana Azad College Of Engineering & Technology</h1>
         </div>
 
         <div class="content">
@@ -547,7 +547,7 @@ export class GmailEmailService {
     <div class="container">
         <div class="header">
             <div style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">❌ Booking Cancelled</div>
-            <h1>Amity University Patna</h1>
+            <h1>Maulana Azad College Of Engineering & Technology</h1>
         </div>
 
         <div class="content">
@@ -808,7 +808,7 @@ export interface BookingEmailData {
 		<div class="container">
 			<!-- Header -->
 			<div class="header">
-				<div class="logo">🏛️ Amity University Patna</div>
+				<div class="logo">🏛️ Maulana Azad College Of Engineering & Technology</div>
 				<h1>Seminar Hall Booking System</h1>
 			</div>
 
@@ -878,7 +878,7 @@ export interface BookingEmailData {
 				</div>
 
 				<div style="text-align: center; margin: 25px 0;">
-					<a href="mailto:admin@amity.edu?subject=Booking Inquiry" class="btn"
+					<a href="mailto:admin@macet.edu?subject=Booking Inquiry" class="btn"
 						>Contact Support</a
 					>
 				</div>
@@ -886,8 +886,8 @@ export interface BookingEmailData {
 				<p style="color: #4b5563; text-align: center; margin-top: 25px;">
 					If you need to make any changes or have questions, please contact us
 					immediately at
-					<a href="mailto:admin@amity.edu" style="color: #1e40af;"
-						>admin@amity.edu</a
+					<a href="mailto:admin@macet.edu" style="color: #1e40af;"
+						>admin@macet.edu</a
 					>
 				</p>
 			</div>
@@ -897,19 +897,19 @@ export interface BookingEmailData {
 				<div style="color: #6b7280; font-size: 14px; line-height: 1.6;">
 					This is an automated email confirmation. Please do not reply directly
 					to this email.
-					<br />For support, contact us at admin@amity.edu
+					<br />For support, contact us at admin@macet.edu
 				</div>
 
 				<div
 					style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e5e7eb;"
 				>
-					<strong>Amity University Patna</strong><br />
+					<strong>Maulana Azad College Of Engineering & Technology</strong><br />
 					Campus Address, Patna, Bihar<br />
-					Phone: +91-XXXX-XXXXXX | Email: info@amity.edu
+					Phone: +91-XXXX-XXXXXX | Email: info@macet.edu
 				</div>
 
 				<div style="margin-top: 15px; color: #9ca3af; font-size: 12px;">
-					© 2025 Amity University Patna. All rights reserved.
+					© 2025 Maulana Azad College Of Engineering & Technology. All rights reserved.
 				</div>
 			</div>
 		</div>
@@ -1670,12 +1670,12 @@ serve(async (req) => {
 | **Deliverability** | Excellent with .edu domain       | Excellent         |
 | **Templates**      | Custom HTML (full control)       | Dynamic templates |
 
-### Recommendation for Amity University
+### Recommendation for MACET
 
 **✅ Use Gmail SMTP** because:
 
 1. **Cost-Effective**: Completely free vs $240/year for SendGrid
-2. **University Domain**: Excellent deliverability with @amity.edu
+2. **University Domain**: Excellent deliverability with @macet.edu
 3. **Simple Setup**: Just need app password, no complex API setup
 4. **Full Control**: Custom HTML templates, no vendor lock-in
 5. **Reliable**: Google's infrastructure is highly reliable
@@ -1694,10 +1694,10 @@ serve(async (req) => {
 
 ```bash
 # .env.local
-GMAIL_USER=admin@amity.edu
+GMAIL_USER=admin@macet.edu
 GMAIL_APP_PASSWORD=your_16_character_app_password
-GMAIL_FROM_NAME=Amity University Patna
-GMAIL_REPLY_TO=admin@amity.edu
+GMAIL_FROM_NAME=Maulana Azad College Of Engineering & Technology
+GMAIL_REPLY_TO=admin@macet.edu
 ```
 
 ### For SendGrid (Alternative)
@@ -1705,8 +1705,8 @@ GMAIL_REPLY_TO=admin@amity.edu
 ```bash
 # .env.local
 SENDGRID_API_KEY=SG.your_api_key_here
-SENDGRID_FROM_EMAIL=bookings@amity.edu
-SENDGRID_REPLY_TO=admin@amity.edu
+SENDGRID_FROM_EMAIL=bookings@macet.edu
+SENDGRID_REPLY_TO=admin@macet.edu
 ```
 
 ## 🎯 Final Implementation Steps

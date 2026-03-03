@@ -70,9 +70,9 @@ export default function LoginScreen({ navigation }: Props) {
 			Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
 			// Show the specific error message from auth store (includes email verification errors)
 			const errorMessage =
-				error instanceof Error
-					? error.message
-					: "Login failed. Please check your credentials and try again.";
+				error instanceof Error ?
+					error.message
+				:	"Login failed. Please check your credentials and try again.";
 			Alert.alert("Login Failed", errorMessage);
 		} finally {
 			setIsLoading(false);
@@ -114,173 +114,190 @@ export default function LoginScreen({ navigation }: Props) {
 					<View style={styles.responsiveContainer}>
 						{/* University Header */}
 						<View style={styles.header}>
-						<View style={styles.logoContainer}>
-							<LinearGradient
-								colors={["rgba(255,255,255,0.2)", "rgba(255,255,255,0.1)"]}
-								style={styles.logoGradient}
-							>
-								<Image
-									source={require("../../assets/collegeLogo.png")}
-									style={styles.logoImage}
-									resizeMode="contain"
-								/>
-							</LinearGradient>
-						</View>
-						<Text style={styles.universityName}>Maulana Azad College Of Engineering & Technology</Text>
-						<Text style={styles.appTitle}>Seminar Hall Booking</Text>
-						<Text style={styles.subtitle}>Sign in to your account</Text>
-					</View>
-
-					{/* Login Form */}
-					<BlurView intensity={20} tint="light" style={styles.formContainer}>
-						<View style={styles.form}>
-							{/* Email Input */}
-							<View style={styles.inputContainer}>
-								<Text style={styles.inputLabel}>Email Address</Text>
-								<View style={[styles.inputWrapper, emailFocused && styles.inputWrapperFocused]}>
-									<Ionicons
-										name="mail-outline"
-										size={20}
-										color={Colors.gray[400]}
-										style={styles.inputIcon}
-									/>
-									<TextInput
-										style={styles.textInput}
-										value={email}
-										onChangeText={setEmail}
-										onFocus={() => setEmailFocused(true)}
-										onBlur={() => setEmailFocused(false)}
-										placeholder="Enter your university email"
-										placeholderTextColor={Colors.gray[400]}
-										keyboardType="email-address"
-										autoCapitalize="none"
-										autoCorrect={false}
-										autoComplete="email"
-									/>
-								</View>
-							</View>
-
-							{/* Password Input */}
-							<View style={styles.inputContainer}>
-								<Text style={styles.inputLabel}>Password</Text>
-								<View style={[styles.inputWrapper, passwordFocused && styles.inputWrapperFocused]}>
-									<Ionicons
-										name="lock-closed-outline"
-										size={20}
-										color={Colors.gray[400]}
-										style={styles.inputIcon}
-									/>
-									<TextInput
-										style={[styles.textInput, styles.passwordInput]}
-										value={password}
-										onChangeText={setPassword}
-										onFocus={() => setPasswordFocused(true)}
-										onBlur={() => setPasswordFocused(false)}
-										placeholder="Enter your password"
-										placeholderTextColor={Colors.gray[400]}
-										secureTextEntry={!showPassword}
-										autoCapitalize="none"
-										autoComplete="password"
-									/>
-									<TouchableOpacity
-										onPress={togglePasswordVisibility}
-										style={styles.passwordToggle}
-									>
-										<Ionicons
-											name={showPassword ? "eye-off-outline" : "eye-outline"}
-											size={20}
-											color={Colors.gray[400]}
-										/>
-									</TouchableOpacity>
-								</View>
-							</View>
-
-							{/* Error Message */}
-							{error && (
-								<View style={styles.errorContainer}>
-									<Ionicons
-										name="alert-circle"
-										size={16}
-										color={Colors.error.main}
-									/>
-									<Text style={styles.errorText}>{error}</Text>
-								</View>
-							)}
-
-							{/* Remember Me Checkbox */}
-							<View style={styles.rememberMeContainer}>
-								<TouchableOpacity
-									style={styles.checkboxContainer}
-									onPress={toggleRememberMe}
-									activeOpacity={0.7}
+							<View style={styles.logoContainer}>
+								<LinearGradient
+									colors={["rgba(255,255,255,0.2)", "rgba(255,255,255,0.1)"]}
+									style={styles.logoGradient}
 								>
+									<Image
+										source={require("../../assets/collegeLogo.png")}
+										style={styles.logoImage}
+										resizeMode="contain"
+									/>
+								</LinearGradient>
+							</View>
+							<Text style={styles.universityName}>
+								Maulana Azad College Of Engineering & Technology
+							</Text>
+							<Text style={styles.appTitle}>Seminar Hall Booking</Text>
+							<Text style={styles.subtitle}>Sign in to your account</Text>
+						</View>
+
+						{/* Login Form */}
+						<BlurView intensity={20} tint="light" style={styles.formContainer}>
+							<View style={styles.form}>
+								{/* Email Input */}
+								<View style={styles.inputContainer}>
+									<Text style={styles.inputLabel}>Email Address</Text>
 									<View
 										style={[
-											styles.checkbox,
-											rememberMe && styles.checkboxChecked,
+											styles.inputWrapper,
+											emailFocused && styles.inputWrapperFocused,
 										]}
 									>
-										{rememberMe && (
-											<Ionicons name="checkmark" size={16} color="white" />
-										)}
+										<Ionicons
+											name="mail-outline"
+											size={20}
+											color={Colors.gray[400]}
+											style={styles.inputIcon}
+										/>
+										<TextInput
+											style={styles.textInput}
+											value={email}
+											onChangeText={setEmail}
+											onFocus={() => setEmailFocused(true)}
+											onBlur={() => setEmailFocused(false)}
+											placeholder="Enter your university email"
+											placeholderTextColor={Colors.gray[400]}
+											keyboardType="email-address"
+											autoCapitalize="none"
+											autoCorrect={false}
+											autoComplete="email"
+										/>
 									</View>
-									<Text style={styles.rememberMeText}>Remember me</Text>
+								</View>
+
+								{/* Password Input */}
+								<View style={styles.inputContainer}>
+									<Text style={styles.inputLabel}>Password</Text>
+									<View
+										style={[
+											styles.inputWrapper,
+											passwordFocused && styles.inputWrapperFocused,
+										]}
+									>
+										<Ionicons
+											name="lock-closed-outline"
+											size={20}
+											color={Colors.gray[400]}
+											style={styles.inputIcon}
+										/>
+										<TextInput
+											style={[styles.textInput, styles.passwordInput]}
+											value={password}
+											onChangeText={setPassword}
+											onFocus={() => setPasswordFocused(true)}
+											onBlur={() => setPasswordFocused(false)}
+											placeholder="Enter your password"
+											placeholderTextColor={Colors.gray[400]}
+											secureTextEntry={!showPassword}
+											autoCapitalize="none"
+											autoComplete="password"
+										/>
+										<TouchableOpacity
+											onPress={togglePasswordVisibility}
+											style={styles.passwordToggle}
+										>
+											<Ionicons
+												name={showPassword ? "eye-off-outline" : "eye-outline"}
+												size={20}
+												color={Colors.gray[400]}
+											/>
+										</TouchableOpacity>
+									</View>
+								</View>
+
+								{/* Error Message */}
+								{error && (
+									<View style={styles.errorContainer}>
+										<Ionicons
+											name="alert-circle"
+											size={16}
+											color={Colors.error.main}
+										/>
+										<Text style={styles.errorText}>{error}</Text>
+									</View>
+								)}
+
+								{/* Remember Me Checkbox */}
+								<View style={styles.rememberMeContainer}>
+									<TouchableOpacity
+										style={styles.checkboxContainer}
+										onPress={toggleRememberMe}
+										activeOpacity={0.7}
+									>
+										<View
+											style={[
+												styles.checkbox,
+												rememberMe && styles.checkboxChecked,
+											]}
+										>
+											{rememberMe && (
+												<Ionicons name="checkmark" size={16} color="white" />
+											)}
+										</View>
+										<Text style={styles.rememberMeText}>Remember me</Text>
+									</TouchableOpacity>
+								</View>
+
+								{/* Login Button */}
+								<TouchableOpacity
+									style={[
+										styles.loginButton,
+										isLoading && styles.loginButtonDisabled,
+									]}
+									onPress={handleLogin}
+									disabled={isLoading}
+									activeOpacity={0.8}
+								>
+									<LinearGradient
+										colors={
+											isLoading ?
+												[Colors.gray[400], Colors.gray[500]]
+											:	["#1e40af", "#3b82f6"]
+										}
+										style={styles.loginButtonGradient}
+										start={{ x: 0, y: 0 }}
+										end={{ x: 1, y: 0 }}
+									>
+										{isLoading ?
+											<View style={styles.loadingContainer}>
+												<Text style={styles.loginButtonText}>
+													Signing In...
+												</Text>
+											</View>
+										:	<View style={styles.loginButtonContent}>
+												<Text style={styles.loginButtonText}>Sign In</Text>
+												<Ionicons
+													name="arrow-forward"
+													size={20}
+													color="white"
+												/>
+											</View>
+										}
+									</LinearGradient>
+								</TouchableOpacity>
+
+								{/* Forgot Password */}
+								<TouchableOpacity
+									style={styles.forgotPasswordButton}
+									onPress={() => navigation.navigate("ForgotPassword")}
+									activeOpacity={0.7}
+								>
+									<Text style={styles.forgotPasswordText}>
+										Forgot your password?
+									</Text>
 								</TouchableOpacity>
 							</View>
+						</BlurView>
 
-							{/* Login Button */}
-							<TouchableOpacity
-								style={[
-									styles.loginButton,
-									isLoading && styles.loginButtonDisabled,
-								]}
-								onPress={handleLogin}
-								disabled={isLoading}
-								activeOpacity={0.8}
-							>
-								<LinearGradient
-									colors={
-										isLoading
-											? [Colors.gray[400], Colors.gray[500]]
-											: ["#1e40af", "#3b82f6"]
-									}
-									style={styles.loginButtonGradient}
-									start={{ x: 0, y: 0 }}
-									end={{ x: 1, y: 0 }}
-								>
-									{isLoading ? (
-										<View style={styles.loadingContainer}>
-											<Text style={styles.loginButtonText}>Signing In...</Text>
-										</View>
-									) : (
-										<View style={styles.loginButtonContent}>
-											<Text style={styles.loginButtonText}>Sign In</Text>
-											<Ionicons name="arrow-forward" size={20} color="white" />
-										</View>
-									)}
-								</LinearGradient>
-							</TouchableOpacity>
-
-							{/* Forgot Password */}
-							<TouchableOpacity
-								style={styles.forgotPasswordButton}
-								onPress={() => navigation.navigate("ForgotPassword")}
-								activeOpacity={0.7}
-							>
-								<Text style={styles.forgotPasswordText}>
-									Forgot your password?
-								</Text>
+						{/* Footer */}
+						<View style={styles.footer}>
+							<Text style={styles.footerText}>Don't have an account? </Text>
+							<TouchableOpacity onPress={() => navigation.navigate("Signup")}>
+								<Text style={styles.signUpText}>Sign Up</Text>
 							</TouchableOpacity>
 						</View>
-					</BlurView>
-
-					{/* Footer */}
-					<View style={styles.footer}>
-						<Text style={styles.footerText}>Don't have an account? </Text>
-						<TouchableOpacity onPress={() => navigation.navigate("Signup")}>
-							<Text style={styles.signUpText}>Sign Up</Text>
-						</TouchableOpacity>
-					</View>
 					</View>
 				</ScrollView>
 			</KeyboardAvoidingView>
@@ -329,9 +346,9 @@ const styles = StyleSheet.create({
 	},
 
 	logoGradient: {
-		width: 100,
-		height: 100,
-		borderRadius: 50,
+		width: 140,
+		height: 90,
+		borderRadius: 16,
 		justifyContent: "center",
 		alignItems: "center",
 		borderWidth: 2,
@@ -339,7 +356,7 @@ const styles = StyleSheet.create({
 	},
 
 	logoImage: {
-		width: 70,
+		width: 120,
 		height: 70,
 	},
 

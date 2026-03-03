@@ -1,4 +1,4 @@
-// Design System Constants for Amity University Booking App
+// Design System Constants for MACET Booking App
 
 export const Colors = {
 	// Primary Brand Colors
@@ -216,7 +216,7 @@ export const Layout = {
 // University specific theme
 export const UniversityTheme = {
 	brand: {
-		primary: Colors.primary[600], // Amity blue
+		primary: Colors.primary[600], // MACET blue
 		secondary: Colors.primary[100],
 		accent: Colors.warning.main, // Gold accent
 	},

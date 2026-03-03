@@ -48,7 +48,7 @@ export default function WebNavigationHeader({
 				<View style={styles.logoContainer}>
 					<Ionicons name="business" size={24} color="#007AFF" />
 				</View>
-				<Text style={styles.brandText}>Amity University Patna</Text>
+				<Text style={styles.brandText}>Maulana Azad College Of Engineering & Technology</Text>
 			</View>
 
 			{/* Navigation Tabs */}

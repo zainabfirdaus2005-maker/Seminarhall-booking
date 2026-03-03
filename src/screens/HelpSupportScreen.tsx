@@ -197,7 +197,7 @@ const HelpSupportScreen: React.FC<HelpSupportScreenProps> = () => {
 						</View>
 						<View style={styles.infoRow}>
 							<Text style={styles.infoLabel}>University</Text>
-							<Text style={styles.infoValue}>Amity University Patna</Text>
+							<Text style={styles.infoValue}>Maulana Azad College Of Engineering & Technology</Text>
 						</View>
 						<View style={styles.infoRow}>
 							<Text style={styles.infoLabel}>Email API</Text>

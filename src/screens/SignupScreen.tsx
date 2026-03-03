@@ -160,19 +160,13 @@ export default function SignupScreen({ navigation }: Props) {
 
 	// Enhanced validation functions
 	const validateEmail = (email: string) => {
-		// More strict email validation with domain requirements
+		// Standard email format validation
 		const emailRegex =
 			/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
 		// Check basic format
 		if (!emailRegex.test(email)) {
 			return { isValid: false, message: "Please enter a valid email address" };
-		}
-
-		// Check for required university domain
-		const requiredDomain = "@ptn.amity.edu";
-		if (!email.toLowerCase().includes(requiredDomain)) {
-			return { isValid: false, message: "Please use your university email address (@ptn.amity.edu)" };
 		}
 
 		return { isValid: true, message: "" };
@@ -195,9 +189,9 @@ export default function SignupScreen({ navigation }: Props) {
 		return {
 			isValid: failedValidations.length === 0,
 			message:
-				failedValidations.length > 0
-					? `Missing: ${failedValidations.map((v) => v.message).join(", ")}`
-					: "",
+				failedValidations.length > 0 ?
+					`Missing: ${failedValidations.map((v) => v.message).join(", ")}`
+				:	"",
 			strength: validations.length - failedValidations.length,
 		};
 	};
@@ -291,7 +285,7 @@ export default function SignupScreen({ navigation }: Props) {
 		if (!passwordValidation.isValid) {
 			Alert.alert(
 				"Weak Password",
-				`Your password needs improvement:\n${passwordValidation.message}`
+				`Your password needs improvement:\n${passwordValidation.message}`,
 			);
 			Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
 			return false;
@@ -384,13 +378,13 @@ export default function SignupScreen({ navigation }: Props) {
 						text: "OK",
 						onPress: () => navigation.navigate("Login"),
 					},
-				]
+				],
 			);
 		} catch (error) {
 			Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
 			Alert.alert(
 				"Registration Failed",
-				"There was an issue creating your account. Please try again."
+				"There was an issue creating your account. Please try again.",
 			);
 		} finally {
 			setIsLoading(false);
@@ -422,151 +416,107 @@ export default function SignupScreen({ navigation }: Props) {
 					<View style={styles.responsiveContainer}>
 						{/* University Header */}
 						<View style={styles.header}>
-						<View style={styles.logoContainer}>
-							<LinearGradient
-								colors={["rgba(255,255,255,0.2)", "rgba(255,255,255,0.1)"]}
-								style={styles.logoGradient}
-							>
-								<Image
-									source={require("../../assets/collegeLogo.png")}
-									style={styles.logoImage}
-									resizeMode="contain"
-								/>
-							</LinearGradient>
+							<View style={styles.logoContainer}>
+								<LinearGradient
+									colors={["rgba(255,255,255,0.2)", "rgba(255,255,255,0.1)"]}
+									style={styles.logoGradient}
+								>
+									<Image
+										source={require("../../assets/collegeLogo.png")}
+										style={styles.logoImage}
+										resizeMode="contain"
+									/>
+								</LinearGradient>
+							</View>
+							<Text style={styles.universityName}>
+								Maulana Azad College Of Engineering & Technology
+							</Text>
+							<Text style={styles.appTitle}>Seminar Hall Booking</Text>
+							<Text style={styles.subtitle}>Create your account</Text>
 						</View>
-						<Text style={styles.universityName}>Maulana Azad College Of Engineering & Technology</Text>
-						<Text style={styles.appTitle}>Seminar Hall Booking</Text>
-						<Text style={styles.subtitle}>Create your account</Text>
-					</View>
 
-					{/* Progress Indicator */}
-					<View style={styles.progressContainer}>
-						<View
-							style={[
-								styles.progressStep,
-								currentStep >= 1 && styles.progressStepActive,
-							]}
-						>
-							<Text
+						{/* Progress Indicator */}
+						<View style={styles.progressContainer}>
+							<View
 								style={[
-									styles.progressText,
-									currentStep >= 1 && styles.progressTextActive,
+									styles.progressStep,
+									currentStep >= 1 && styles.progressStepActive,
 								]}
 							>
-								1
-							</Text>
-						</View>
-						<View style={styles.progressLine} />
-						<View
-							style={[
-								styles.progressStep,
-								currentStep >= 2 && styles.progressStepActive,
-							]}
-						>
-							<Text
+								<Text
+									style={[
+										styles.progressText,
+										currentStep >= 1 && styles.progressTextActive,
+									]}
+								>
+									1
+								</Text>
+							</View>
+							<View style={styles.progressLine} />
+							<View
 								style={[
-									styles.progressText,
-									currentStep >= 2 && styles.progressTextActive,
+									styles.progressStep,
+									currentStep >= 2 && styles.progressStepActive,
 								]}
 							>
-								2
-							</Text>
+								<Text
+									style={[
+										styles.progressText,
+										currentStep >= 2 && styles.progressTextActive,
+									]}
+								>
+									2
+								</Text>
+							</View>
 						</View>
-					</View>
 
-					{/* Registration Form */}
-					<BlurView intensity={20} tint="light" style={styles.formContainer}>
-						<View style={styles.form}>
-							{currentStep === 1 ? (
-								<>
-									{/* Step 1: Basic Information */}
-									<View style={styles.formTitle}>
-										<Ionicons
-											name="person-add-outline"
-											size={20}
-											color={Colors.primary[600]}
-											style={styles.formTitleIcon}
-										/>
-										<Text style={styles.formTitleText}>Basic Information</Text>
-									</View>
-
-									{/* Full Name Input */}
-									<View style={styles.inputContainer}>
-										<Text style={styles.inputLabel}>Full Name *</Text>
-										<View
-											style={[
-												styles.inputWrapper,
-												validationErrors.name && styles.inputWrapperError,
-											]}
-										>
+						{/* Registration Form */}
+						<BlurView intensity={20} tint="light" style={styles.formContainer}>
+							<View style={styles.form}>
+								{currentStep === 1 ?
+									<>
+										{/* Step 1: Basic Information */}
+										<View style={styles.formTitle}>
 											<Ionicons
-												name="person-outline"
+												name="person-add-outline"
 												size={20}
-												color={
-													validationErrors.name
-														? Colors.error.main
-														: Colors.gray[400]
-												}
-												style={styles.inputIcon}
+												color={Colors.primary[600]}
+												style={styles.formTitleIcon}
 											/>
-											<TextInput
-												style={styles.textInput}
-												value={name}
-												onChangeText={handleNameChange}
-												placeholder="Enter your full name"
-												placeholderTextColor={Colors.gray[400]}
-												autoCapitalize="words"
-												autoCorrect={false}
-											/>
-											{!validationErrors.name && name.length > 1 && (
-												<Ionicons
-													name="checkmark-circle"
-													size={20}
-													color={Colors.success.main}
-													style={styles.validationIcon}
-												/>
-											)}
-										</View>
-										{validationErrors.name ? (
-											<Text style={styles.errorHint}>
-												{validationErrors.name}
+											<Text style={styles.formTitleText}>
+												Basic Information
 											</Text>
-										) : null}
-									</View>
+										</View>
 
-									{/* Email Input */}
-									<View style={styles.inputContainer}>
-										<Text style={styles.inputLabel}>Email Address *</Text>
-										<View
-											style={[
-												styles.inputWrapper,
-												validationErrors.email && styles.inputWrapperError,
-											]}
-										>
-											<Ionicons
-												name="mail-outline"
-												size={20}
-												color={
-													validationErrors.email
-														? Colors.error.main
-														: Colors.gray[400]
-												}
-												style={styles.inputIcon}
-											/>
-											<TextInput
-												style={styles.textInput}
-												value={email}
-												onChangeText={handleEmailChange}
-												placeholder="Enter your university email"
-												placeholderTextColor={Colors.gray[400]}
-												keyboardType="email-address"
-												autoCapitalize="none"
-												autoCorrect={false}
-												autoComplete="email"
-											/>
-											{!validationErrors.email &&
-												email.length > 0 &&
-												validateEmail(email).isValid && (
+										{/* Full Name Input */}
+										<View style={styles.inputContainer}>
+											<Text style={styles.inputLabel}>Full Name *</Text>
+											<View
+												style={[
+													styles.inputWrapper,
+													validationErrors.name && styles.inputWrapperError,
+												]}
+											>
+												<Ionicons
+													name="person-outline"
+													size={20}
+													color={
+														validationErrors.name ?
+															Colors.error.main
+														:	Colors.gray[400]
+													}
+													style={styles.inputIcon}
+												/>
+												<TextInput
+													style={styles.textInput}
+													value={name}
+													onChangeText={handleNameChange}
+													placeholder="Enter your full name"
+													placeholderTextColor={Colors.gray[400]}
+													autoCapitalize="words"
+													autoCorrect={false}
+												/>
+												{!validationErrors.name && name.length > 1 && (
 													<Ionicons
 														name="checkmark-circle"
 														size={20}
@@ -574,430 +524,475 @@ export default function SignupScreen({ navigation }: Props) {
 														style={styles.validationIcon}
 													/>
 												)}
-										</View>
-										{validationErrors.email ? (
-											<Text style={styles.errorHint}>
-												{validationErrors.email}
-											</Text>
-										) : null}
-									</View>
-
-									{/* Password Input */}
-									<View style={styles.inputContainer}>
-										<Text style={styles.inputLabel}>Password *</Text>
-										<View
-											style={[
-												styles.inputWrapper,
-												validationErrors.password && styles.inputWrapperError,
-											]}
-										>
-											<Ionicons
-												name="lock-closed-outline"
-												size={20}
-												color={
-													validationErrors.password
-														? Colors.error.main
-														: Colors.gray[400]
-												}
-												style={styles.inputIcon}
-											/>
-											<TextInput
-												style={[styles.textInput, styles.passwordInput]}
-												value={password}
-												onChangeText={handlePasswordChange}
-												placeholder="Create a strong password"
-												placeholderTextColor={Colors.gray[400]}
-												secureTextEntry={!showPassword}
-												autoCapitalize="none"
-												autoComplete="password-new"
-											/>
-											<TouchableOpacity
-												onPress={togglePasswordVisibility}
-												style={styles.passwordToggle}
-											>
-												<Ionicons
-													name={
-														showPassword ? "eye-off-outline" : "eye-outline"
-													}
-													size={20}
-													color={Colors.gray[400]}
-												/>
-											</TouchableOpacity>
-										</View>
-
-										{/* Password Strength Indicator */}
-										{password.length > 0 && (
-											<View style={styles.passwordStrengthContainer}>
-												<View style={styles.strengthBars}>
-													{[1, 2, 3, 4, 5].map((level) => (
-														<View
-															key={level}
-															style={[
-																styles.strengthBar,
-																passwordStrength >= level &&
-																	styles.strengthBarActive,
-																passwordStrength >= level && {
-																	backgroundColor:
-																		passwordStrength <= 2
-																			? Colors.error.main
-																			: passwordStrength <= 4
-																			? Colors.warning.main
-																			: Colors.success.main,
-																},
-															]}
-														/>
-													))}
-												</View>
-												<Text
-													style={[
-														styles.strengthText,
-														{
-															color:
-																passwordStrength <= 2
-																	? Colors.error.main
-																	: passwordStrength <= 4
-																	? Colors.warning.main
-																	: Colors.success.main,
-														},
-													]}
-												>
-													{passwordStrength <= 2
-														? "Weak"
-														: passwordStrength <= 4
-														? "Medium"
-														: "Strong"}
-												</Text>
 											</View>
-										)}
+											{validationErrors.name ?
+												<Text style={styles.errorHint}>
+													{validationErrors.name}
+												</Text>
+											:	null}
+										</View>
 
-										<Text style={styles.passwordHint}>
-											Password must include: uppercase, lowercase, number,
-											special character (8+ chars)
-										</Text>
-										{validationErrors.password ? (
-											<Text style={styles.errorHint}>
-												{validationErrors.password}
-											</Text>
-										) : null}
-									</View>
-
-									{/* Confirm Password Input */}
-									<View style={styles.inputContainer}>
-										<Text style={styles.inputLabel}>Confirm Password *</Text>
-										<View
-											style={[
-												styles.inputWrapper,
-												validationErrors.confirmPassword &&
-													styles.inputWrapperError,
-											]}
-										>
-											<Ionicons
-												name="lock-closed-outline"
-												size={20}
-												color={
-													validationErrors.confirmPassword
-														? Colors.error.main
-														: Colors.gray[400]
-												}
-												style={styles.inputIcon}
-											/>
-											<TextInput
-												style={[styles.textInput, styles.passwordInput]}
-												value={confirmPassword}
-												onChangeText={handleConfirmPasswordChange}
-												placeholder="Confirm your password"
-												placeholderTextColor={Colors.gray[400]}
-												secureTextEntry={!showConfirmPassword}
-												autoCapitalize="none"
-											/>
-											<TouchableOpacity
-												onPress={toggleConfirmPasswordVisibility}
-												style={styles.passwordToggle}
+										{/* Email Input */}
+										<View style={styles.inputContainer}>
+											<Text style={styles.inputLabel}>Email Address *</Text>
+											<View
+												style={[
+													styles.inputWrapper,
+													validationErrors.email && styles.inputWrapperError,
+												]}
 											>
 												<Ionicons
-													name={
-														showConfirmPassword
-															? "eye-off-outline"
-															: "eye-outline"
-													}
+													name="mail-outline"
 													size={20}
-													color={Colors.gray[400]}
+													color={
+														validationErrors.email ?
+															Colors.error.main
+														:	Colors.gray[400]
+													}
+													style={styles.inputIcon}
 												/>
-											</TouchableOpacity>
-											{!validationErrors.confirmPassword &&
-												confirmPassword.length > 0 &&
-												password === confirmPassword && (
-													<View style={styles.confirmPasswordCheck}>
+												<TextInput
+													style={styles.textInput}
+													value={email}
+													onChangeText={handleEmailChange}
+													placeholder="Enter your university email"
+													placeholderTextColor={Colors.gray[400]}
+													keyboardType="email-address"
+													autoCapitalize="none"
+													autoCorrect={false}
+													autoComplete="email"
+												/>
+												{!validationErrors.email &&
+													email.length > 0 &&
+													validateEmail(email).isValid && (
 														<Ionicons
 															name="checkmark-circle"
 															size={20}
 															color={Colors.success.main}
+															style={styles.validationIcon}
 														/>
+													)}
+											</View>
+											{validationErrors.email ?
+												<Text style={styles.errorHint}>
+													{validationErrors.email}
+												</Text>
+											:	null}
+										</View>
+
+										{/* Password Input */}
+										<View style={styles.inputContainer}>
+											<Text style={styles.inputLabel}>Password *</Text>
+											<View
+												style={[
+													styles.inputWrapper,
+													validationErrors.password && styles.inputWrapperError,
+												]}
+											>
+												<Ionicons
+													name="lock-closed-outline"
+													size={20}
+													color={
+														validationErrors.password ?
+															Colors.error.main
+														:	Colors.gray[400]
+													}
+													style={styles.inputIcon}
+												/>
+												<TextInput
+													style={[styles.textInput, styles.passwordInput]}
+													value={password}
+													onChangeText={handlePasswordChange}
+													placeholder="Create a strong password"
+													placeholderTextColor={Colors.gray[400]}
+													secureTextEntry={!showPassword}
+													autoCapitalize="none"
+													autoComplete="password-new"
+												/>
+												<TouchableOpacity
+													onPress={togglePasswordVisibility}
+													style={styles.passwordToggle}
+												>
+													<Ionicons
+														name={
+															showPassword ? "eye-off-outline" : "eye-outline"
+														}
+														size={20}
+														color={Colors.gray[400]}
+													/>
+												</TouchableOpacity>
+											</View>
+
+											{/* Password Strength Indicator */}
+											{password.length > 0 && (
+												<View style={styles.passwordStrengthContainer}>
+													<View style={styles.strengthBars}>
+														{[1, 2, 3, 4, 5].map((level) => (
+															<View
+																key={level}
+																style={[
+																	styles.strengthBar,
+																	passwordStrength >= level &&
+																		styles.strengthBarActive,
+																	passwordStrength >= level && {
+																		backgroundColor:
+																			passwordStrength <= 2 ? Colors.error.main
+																			: passwordStrength <= 4 ?
+																				Colors.warning.main
+																			:	Colors.success.main,
+																	},
+																]}
+															/>
+														))}
 													</View>
-												)}
-										</View>
-										{validationErrors.confirmPassword ? (
-											<Text style={styles.errorHint}>
-												{validationErrors.confirmPassword}
-											</Text>
-										) : null}
-									</View>
+													<Text
+														style={[
+															styles.strengthText,
+															{
+																color:
+																	passwordStrength <= 2 ? Colors.error.main
+																	: passwordStrength <= 4 ? Colors.warning.main
+																	: Colors.success.main,
+															},
+														]}
+													>
+														{passwordStrength <= 2 ?
+															"Weak"
+														: passwordStrength <= 4 ?
+															"Medium"
+														:	"Strong"}
+													</Text>
+												</View>
+											)}
 
-									{/* Next Step Button */}
-									<TouchableOpacity
-										style={styles.actionButton}
-										onPress={moveToNextStep}
-										activeOpacity={0.8}
-									>
-										<LinearGradient
-											colors={["#1e40af", "#3b82f6"]}
-											style={styles.actionButtonGradient}
-											start={{ x: 0, y: 0 }}
-											end={{ x: 1, y: 0 }}
-										>
-											<View style={styles.actionButtonContent}>
-												<Text style={styles.actionButtonText}>Continue</Text>
+											<Text style={styles.passwordHint}>
+												Password must include: uppercase, lowercase, number,
+												special character (8+ chars)
+											</Text>
+											{validationErrors.password ?
+												<Text style={styles.errorHint}>
+													{validationErrors.password}
+												</Text>
+											:	null}
+										</View>
+
+										{/* Confirm Password Input */}
+										<View style={styles.inputContainer}>
+											<Text style={styles.inputLabel}>Confirm Password *</Text>
+											<View
+												style={[
+													styles.inputWrapper,
+													validationErrors.confirmPassword &&
+														styles.inputWrapperError,
+												]}
+											>
 												<Ionicons
-													name="arrow-forward"
+													name="lock-closed-outline"
 													size={20}
-													color="white"
+													color={
+														validationErrors.confirmPassword ?
+															Colors.error.main
+														:	Colors.gray[400]
+													}
+													style={styles.inputIcon}
 												/>
-											</View>
-										</LinearGradient>
-									</TouchableOpacity>
-								</>
-							) : (
-								<>
-									{/* Step 2: Faculty Information */}
-									<View style={styles.formTitle}>
-										<Ionicons
-											name="school-outline"
-											size={20}
-											color={Colors.primary[600]}
-											style={styles.formTitleIcon}
-										/>
-										<Text style={styles.formTitleText}>
-											Faculty Information
-										</Text>
-									</View>
-
-									{/* Employee ID Input */}
-									<View style={styles.inputContainer}>
-										<Text style={styles.inputLabel}>Employee ID *</Text>
-										<View
-											style={[
-												styles.inputWrapper,
-												validationErrors.employeeId && styles.inputWrapperError,
-											]}
-										>
-											<Ionicons
-												name="card-outline"
-												size={20}
-												color={
-													validationErrors.employeeId
-														? Colors.error.main
-														: Colors.gray[400]
-												}
-												style={styles.inputIcon}
-											/>
-											<TextInput
-												style={styles.textInput}
-												value={employeeId}
-												onChangeText={handleEmployeeIdChange}
-												placeholder="Enter your employee ID"
-												placeholderTextColor={Colors.gray[400]}
-												autoCapitalize="characters"
-												autoCorrect={false}
-											/>
-											{!validationErrors.employeeId &&
-												employeeId.length > 2 && (
-													<Ionicons
-														name="checkmark-circle"
-														size={20}
-														color={Colors.success.main}
-														style={styles.validationIcon}
-													/>
-												)}
-										</View>
-										{validationErrors.employeeId ? (
-											<Text style={styles.errorHint}>
-												{validationErrors.employeeId}
-											</Text>
-										) : null}
-									</View>
-
-									{/* Department Input */}
-									<View style={styles.inputContainer}>
-										<Text style={styles.inputLabel}>Department</Text>
-										<View
-											style={[
-												styles.inputWrapper,
-												validationErrors.department && styles.inputWrapperError,
-											]}
-										>
-											<Ionicons
-												name="business-outline"
-												size={20}
-												color={
-													validationErrors.department
-														? Colors.error.main
-														: Colors.gray[400]
-												}
-												style={styles.inputIcon}
-											/>
-											<TextInput
-												style={styles.textInput}
-												value={department}
-												onChangeText={handleDepartmentChange}
-												placeholder="Enter your department"
-												placeholderTextColor={Colors.gray[400]}
-												autoCapitalize="words"
-												autoCorrect={false}
-											/>
-											{!validationErrors.department &&
-												department.length > 1 && (
-													<Ionicons
-														name="checkmark-circle"
-														size={20}
-														color={Colors.success.main}
-														style={styles.validationIcon}
-													/>
-												)}
-										</View>
-										{validationErrors.department ? (
-											<Text style={styles.errorHint}>
-												{validationErrors.department}
-											</Text>
-										) : null}
-									</View>
-
-									{/* Phone Number Input */}
-									<View style={styles.inputContainer}>
-										<Text style={styles.inputLabel}>Phone Number</Text>
-										<View
-											style={[
-												styles.inputWrapper,
-												validationErrors.phone && styles.inputWrapperError,
-											]}
-										>
-											<Ionicons
-												name="call-outline"
-												size={20}
-												color={
-													validationErrors.phone
-														? Colors.error.main
-														: Colors.gray[400]
-												}
-												style={styles.inputIcon}
-											/>
-											<TextInput
-												style={styles.textInput}
-												value={phone}
-												onChangeText={handlePhoneChange}
-												placeholder="Enter your phone number"
-												placeholderTextColor={Colors.gray[400]}
-												keyboardType="phone-pad"
-												autoCorrect={false}
-											/>
-											{!validationErrors.phone &&
-												phone.length > 0 &&
-												validatePhone(phone).isValid && (
-													<Ionicons
-														name="checkmark-circle"
-														size={20}
-														color={Colors.success.main}
-														style={styles.validationIcon}
-													/>
-												)}
-										</View>
-										{validationErrors.phone ? (
-											<Text style={styles.errorHint}>
-												{validationErrors.phone}
-											</Text>
-										) : phone.length === 0 ? (
-											<Text style={styles.optionalHint}>
-												Optional - but recommended for notifications
-											</Text>
-										) : null}
-									</View>
-
-									{/* Back and Register Button Row */}
-									<View style={styles.buttonRow}>
-										<TouchableOpacity
-											style={styles.backButton}
-											onPress={moveToPreviousStep}
-											activeOpacity={0.8}
-										>
-											<View style={styles.backButtonContent}>
-												<Ionicons
-													name="arrow-back"
-													size={20}
-													color={Colors.primary[600]}
+												<TextInput
+													style={[styles.textInput, styles.passwordInput]}
+													value={confirmPassword}
+													onChangeText={handleConfirmPasswordChange}
+													placeholder="Confirm your password"
+													placeholderTextColor={Colors.gray[400]}
+													secureTextEntry={!showConfirmPassword}
+													autoCapitalize="none"
 												/>
-												<Text style={styles.backButtonText}>Back</Text>
+												<TouchableOpacity
+													onPress={toggleConfirmPasswordVisibility}
+													style={styles.passwordToggle}
+												>
+													<Ionicons
+														name={
+															showConfirmPassword ? "eye-off-outline" : (
+																"eye-outline"
+															)
+														}
+														size={20}
+														color={Colors.gray[400]}
+													/>
+												</TouchableOpacity>
+												{!validationErrors.confirmPassword &&
+													confirmPassword.length > 0 &&
+													password === confirmPassword && (
+														<View style={styles.confirmPasswordCheck}>
+															<Ionicons
+																name="checkmark-circle"
+																size={20}
+																color={Colors.success.main}
+															/>
+														</View>
+													)}
 											</View>
-										</TouchableOpacity>
+											{validationErrors.confirmPassword ?
+												<Text style={styles.errorHint}>
+													{validationErrors.confirmPassword}
+												</Text>
+											:	null}
+										</View>
 
+										{/* Next Step Button */}
 										<TouchableOpacity
-											style={[
-												styles.registerButton,
-												isLoading && styles.registerButtonDisabled,
-											]}
-											onPress={handleSignup}
-											disabled={isLoading}
+											style={styles.actionButton}
+											onPress={moveToNextStep}
 											activeOpacity={0.8}
 										>
 											<LinearGradient
-												colors={
-													isLoading
-														? [Colors.gray[400], Colors.gray[500]]
-														: ["#1e40af", "#3b82f6"]
-												}
-												style={styles.registerButtonGradient}
+												colors={["#1e40af", "#3b82f6"]}
+												style={styles.actionButtonGradient}
 												start={{ x: 0, y: 0 }}
 												end={{ x: 1, y: 0 }}
 											>
-												{isLoading ? (
-													<View style={styles.loadingContainer}>
-														<ActivityIndicator color="white" size="small" />
-														<Text style={styles.registerButtonText}>
-															Creating...
-														</Text>
-													</View>
-												) : (
-													<View style={styles.registerButtonContent}>
-														<Text style={styles.registerButtonText}>
-															Sign Up
-														</Text>
-													</View>
-												)}
+												<View style={styles.actionButtonContent}>
+													<Text style={styles.actionButtonText}>Continue</Text>
+													<Ionicons
+														name="arrow-forward"
+														size={20}
+														color="white"
+													/>
+												</View>
 											</LinearGradient>
 										</TouchableOpacity>
-									</View>
-
-									{/* Error Message */}
-									{error && (
-										<View style={styles.errorContainer}>
+									</>
+								:	<>
+										{/* Step 2: Faculty Information */}
+										<View style={styles.formTitle}>
 											<Ionicons
-												name="alert-circle"
-												size={16}
-												color={Colors.error.main}
+												name="school-outline"
+												size={20}
+												color={Colors.primary[600]}
+												style={styles.formTitleIcon}
 											/>
-											<Text style={styles.errorText}>{error}</Text>
+											<Text style={styles.formTitleText}>
+												Faculty Information
+											</Text>
 										</View>
-									)}
-								</>
-							)}
-						</View>
-					</BlurView>
 
-					{/* Footer */}
-					<View style={styles.footer}>
-						<Text style={styles.footerText}>Already have an account? </Text>
-						<TouchableOpacity onPress={() => navigation.navigate("Login")}>
-							<Text style={styles.signInText}>Sign In</Text>
-						</TouchableOpacity>
-					</View>
+										{/* Employee ID Input */}
+										<View style={styles.inputContainer}>
+											<Text style={styles.inputLabel}>Employee ID *</Text>
+											<View
+												style={[
+													styles.inputWrapper,
+													validationErrors.employeeId &&
+														styles.inputWrapperError,
+												]}
+											>
+												<Ionicons
+													name="card-outline"
+													size={20}
+													color={
+														validationErrors.employeeId ?
+															Colors.error.main
+														:	Colors.gray[400]
+													}
+													style={styles.inputIcon}
+												/>
+												<TextInput
+													style={styles.textInput}
+													value={employeeId}
+													onChangeText={handleEmployeeIdChange}
+													placeholder="Enter your employee ID"
+													placeholderTextColor={Colors.gray[400]}
+													autoCapitalize="characters"
+													autoCorrect={false}
+												/>
+												{!validationErrors.employeeId &&
+													employeeId.length > 2 && (
+														<Ionicons
+															name="checkmark-circle"
+															size={20}
+															color={Colors.success.main}
+															style={styles.validationIcon}
+														/>
+													)}
+											</View>
+											{validationErrors.employeeId ?
+												<Text style={styles.errorHint}>
+													{validationErrors.employeeId}
+												</Text>
+											:	null}
+										</View>
+
+										{/* Department Input */}
+										<View style={styles.inputContainer}>
+											<Text style={styles.inputLabel}>Department</Text>
+											<View
+												style={[
+													styles.inputWrapper,
+													validationErrors.department &&
+														styles.inputWrapperError,
+												]}
+											>
+												<Ionicons
+													name="business-outline"
+													size={20}
+													color={
+														validationErrors.department ?
+															Colors.error.main
+														:	Colors.gray[400]
+													}
+													style={styles.inputIcon}
+												/>
+												<TextInput
+													style={styles.textInput}
+													value={department}
+													onChangeText={handleDepartmentChange}
+													placeholder="Enter your department"
+													placeholderTextColor={Colors.gray[400]}
+													autoCapitalize="words"
+													autoCorrect={false}
+												/>
+												{!validationErrors.department &&
+													department.length > 1 && (
+														<Ionicons
+															name="checkmark-circle"
+															size={20}
+															color={Colors.success.main}
+															style={styles.validationIcon}
+														/>
+													)}
+											</View>
+											{validationErrors.department ?
+												<Text style={styles.errorHint}>
+													{validationErrors.department}
+												</Text>
+											:	null}
+										</View>
+
+										{/* Phone Number Input */}
+										<View style={styles.inputContainer}>
+											<Text style={styles.inputLabel}>Phone Number</Text>
+											<View
+												style={[
+													styles.inputWrapper,
+													validationErrors.phone && styles.inputWrapperError,
+												]}
+											>
+												<Ionicons
+													name="call-outline"
+													size={20}
+													color={
+														validationErrors.phone ?
+															Colors.error.main
+														:	Colors.gray[400]
+													}
+													style={styles.inputIcon}
+												/>
+												<TextInput
+													style={styles.textInput}
+													value={phone}
+													onChangeText={handlePhoneChange}
+													placeholder="Enter your phone number"
+													placeholderTextColor={Colors.gray[400]}
+													keyboardType="phone-pad"
+													autoCorrect={false}
+												/>
+												{!validationErrors.phone &&
+													phone.length > 0 &&
+													validatePhone(phone).isValid && (
+														<Ionicons
+															name="checkmark-circle"
+															size={20}
+															color={Colors.success.main}
+															style={styles.validationIcon}
+														/>
+													)}
+											</View>
+											{validationErrors.phone ?
+												<Text style={styles.errorHint}>
+													{validationErrors.phone}
+												</Text>
+											: phone.length === 0 ?
+												<Text style={styles.optionalHint}>
+													Optional - but recommended for notifications
+												</Text>
+											:	null}
+										</View>
+
+										{/* Back and Register Button Row */}
+										<View style={styles.buttonRow}>
+											<TouchableOpacity
+												style={styles.backButton}
+												onPress={moveToPreviousStep}
+												activeOpacity={0.8}
+											>
+												<View style={styles.backButtonContent}>
+													<Ionicons
+														name="arrow-back"
+														size={20}
+														color={Colors.primary[600]}
+													/>
+													<Text style={styles.backButtonText}>Back</Text>
+												</View>
+											</TouchableOpacity>
+
+											<TouchableOpacity
+												style={[
+													styles.registerButton,
+													isLoading && styles.registerButtonDisabled,
+												]}
+												onPress={handleSignup}
+												disabled={isLoading}
+												activeOpacity={0.8}
+											>
+												<LinearGradient
+													colors={
+														isLoading ?
+															[Colors.gray[400], Colors.gray[500]]
+														:	["#1e40af", "#3b82f6"]
+													}
+													style={styles.registerButtonGradient}
+													start={{ x: 0, y: 0 }}
+													end={{ x: 1, y: 0 }}
+												>
+													{isLoading ?
+														<View style={styles.loadingContainer}>
+															<ActivityIndicator color="white" size="small" />
+															<Text style={styles.registerButtonText}>
+																Creating...
+															</Text>
+														</View>
+													:	<View style={styles.registerButtonContent}>
+															<Text style={styles.registerButtonText}>
+																Sign Up
+															</Text>
+														</View>
+													}
+												</LinearGradient>
+											</TouchableOpacity>
+										</View>
+
+										{/* Error Message */}
+										{error && (
+											<View style={styles.errorContainer}>
+												<Ionicons
+													name="alert-circle"
+													size={16}
+													color={Colors.error.main}
+												/>
+												<Text style={styles.errorText}>{error}</Text>
+											</View>
+										)}
+									</>
+								}
+							</View>
+						</BlurView>
+
+						{/* Footer */}
+						<View style={styles.footer}>
+							<Text style={styles.footerText}>Already have an account? </Text>
+							<TouchableOpacity onPress={() => navigation.navigate("Login")}>
+								<Text style={styles.signInText}>Sign In</Text>
+							</TouchableOpacity>
+						</View>
 					</View>
 				</ScrollView>
 			</KeyboardAvoidingView>

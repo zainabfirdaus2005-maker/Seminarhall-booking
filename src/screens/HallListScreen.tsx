@@ -210,7 +210,7 @@ export default function HallListScreen({ navigation }: any) {
 							{ color: themeColors.text.secondary },
 						]}
 					>
-						Amity University Patna • {halls.length} Halls Available
+						Maulana Azad College Of Engineering & Technology • {halls.length} Halls Available
 					</Text>
 				</View>
 

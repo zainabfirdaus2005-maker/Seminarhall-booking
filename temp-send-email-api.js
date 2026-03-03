@@ -41,7 +41,7 @@ export default async function handler(req, res) {
 		// Email options
 		const mailOptions = {
 			from: `"${
-				process.env.GMAIL_FROM_NAME || "Amity Seminar Hall Booking"
+				process.env.GMAIL_FROM_NAME || "MACET Seminar Hall Booking"
 			}" <${process.env.GMAIL_FROM_EMAIL}>`,
 			to: to,
 			subject: subject,
@@ -72,7 +72,7 @@ function generateEmailTemplate(emailType, data) {
 	const baseStyle = `
     <div style="max-width: 600px; margin: 0 auto; font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
       <div style="background: linear-gradient(135deg, #007AFF 0%, #0056CC 100%); padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
-        <h1 style="color: white; margin: 0; font-size: 28px;">Amity Seminar Hall</h1>
+        <h1 style="color: white; margin: 0; font-size: 28px;">MACET Seminar Hall</h1>
         <p style="color: #E8F4FD; margin: 5px 0 0 0; font-size: 16px;">Booking Management System</p>
       </div>
       <div style="background: white; padding: 30px; border-radius: 0 0 8px 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
@@ -81,7 +81,7 @@ function generateEmailTemplate(emailType, data) {
 	const baseEndStyle = `
       </div>
       <div style="text-align: center; padding: 20px; color: #666; font-size: 14px;">
-        <p>This email was sent by Amity Seminar Hall Booking System</p>
+        <p>This email was sent by MACET Seminar Hall Booking System</p>
         <p>For support, contact: <a href="mailto:vikashkelly@gmail.com" style="color: #007AFF;">vikashkelly@gmail.com</a></p>
       </div>
     </div>
@@ -195,7 +195,7 @@ function generateEmailTemplate(emailType, data) {
 				`
         <h2 style="color: #007AFF; margin-bottom: 20px;">Notification</h2>
         <p>Dear User,</p>
-        <p>You have received a notification from Amity Seminar Hall Booking System.</p>
+        <p>You have received a notification from MACET Seminar Hall Booking System.</p>
         <p>Please check the app for more details.</p>
       ` +
 				baseEndStyle

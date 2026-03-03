@@ -220,7 +220,7 @@ class EmailService {
   async testEmailConfiguration(
     testEmail: string,
     subject: string = 'Test Email',
-    message: string = 'This is a test email from the Amity Seminar Hall Booking App'
+    message: string = 'This is a test email from the MACET Seminar Hall Booking App'
   ): Promise<{ success: boolean; message: string }> {
     try {
       console.log(`🧪 Testing email configuration with ${testEmail}`);
@@ -559,19 +559,19 @@ class EmailService {
   private getEmailSubject(template: EmailNotification['template_type']): string {
     switch (template) {
       case 'booking_confirmation':
-        return 'Booking Confirmed - Amity Seminar Hall';
+        return 'Booking Confirmed - MACET Seminar Hall';
       case 'booking_approved':
-        return 'Booking Approved - Amity Seminar Hall';
+        return 'Booking Approved - MACET Seminar Hall';
       case 'booking_rejected':
-        return 'Booking Rejected - Amity Seminar Hall';
+        return 'Booking Rejected - MACET Seminar Hall';
       case 'booking_cancelled':
-        return 'Booking Cancelled - Amity Seminar Hall';
+        return 'Booking Cancelled - MACET Seminar Hall';
       case 'booking_reminder':
-        return 'Booking Reminder - Amity Seminar Hall';
+        return 'Booking Reminder - MACET Seminar Hall';
       case 'password_reset':
-        return 'Password Reset - Amity Seminar Hall';
+        return 'Password Reset - MACET Seminar Hall';
       default:
-        return 'Notification - Amity Seminar Hall';
+        return 'Notification - MACET Seminar Hall';
     }
   }
 

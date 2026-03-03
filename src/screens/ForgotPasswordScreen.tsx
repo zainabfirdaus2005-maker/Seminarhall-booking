@@ -168,7 +168,7 @@ export default function ForgotPasswordScreen({ navigation }: Props) {
 							</LinearGradient>
 						</View>
 
-						<Text style={styles.universityName}>Amity University Patna</Text>
+						<Text style={styles.universityName}>Maulana Azad College Of Engineering & Technology</Text>
 						<Text style={styles.appTitle}>Seminar Hall Booking</Text>
 						<Text style={styles.subtitle}>
 							{emailSent ? "Check your email" : "Reset your password"}

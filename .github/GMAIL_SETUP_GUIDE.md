@@ -1,8 +1,8 @@
-# 📧 Gmail SMTP Setup Guide - Amity University Seminar Hall Booking
+# 📧 Gmail SMTP Setup Guide - MACET Seminar Hall Booking
 
 ## 🎯 Quick Start with Gmail SMTP (FREE Solution)
 
-This guide will help you set up Gmail SMTP for your Amity University seminar hall booking app in under 15 minutes - completely FREE!
+This guide will help you set up Gmail SMTP for your MACET Seminar Hall booking app in under 15 minutes - completely FREE!
 
 ---
 
@@ -14,7 +14,7 @@ This guide will help you set up Gmail SMTP for your Amity University seminar hal
 | ------------------------ | ------------------------------------------ |
 | 🆓 **Completely FREE**   | No monthly costs vs $240/year for SendGrid |
 | 📧 **2000 emails/day**   | More than enough for seminar hall bookings |
-| 🏫 **University Domain** | Excellent deliverability with @amity.edu   |
+| 🏫 **University Domain** | Excellent deliverability with @macet.edu   |
 | ⚡ **Quick Setup**       | 15 minutes vs hours for other services     |
 | 🔒 **Google Security**   | Enterprise-grade security and reliability  |
 | 🎨 **Custom Templates**  | Full control over email design             |
@@ -25,7 +25,7 @@ This guide will help you set up Gmail SMTP for your Amity University seminar hal
 
 ### Step 1: Prepare Gmail Account
 
-1. **Use Institutional Email**: `admin@amity.edu` or `bookings@amity.edu`
+1. **Use Institutional Email**: `admin@macet.edu` or `bookings@macet.edu`
 2. **Enable 2-Factor Authentication**:
    - Go to [Google Account Security](https://myaccount.google.com/security)
    - Click "2-Step Verification" → "Get Started"
@@ -42,7 +42,7 @@ This guide will help you set up Gmail SMTP for your Amity University seminar hal
 
    - Select app: "Mail"
    - Select device: "Other (custom name)"
-   - Enter: "Amity Booking App"
+   - Enter: "MACET Booking App"
    - Click "Generate"
 
 3. **Copy the Password**: You'll get a 16-character password like: `abcd efgh ijkl mnop`
@@ -57,10 +57,10 @@ EXPO_PUBLIC_SUPABASE_URL=your_supabase_url
 EXPO_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 
 # Gmail SMTP Configuration
-GMAIL_USER=admin@amity.edu
+GMAIL_USER=admin@macet.edu
 GMAIL_APP_PASSWORD=abcd efgh ijkl mnop
-GMAIL_FROM_NAME=Amity University Patna
-GMAIL_REPLY_TO=admin@amity.edu
+GMAIL_FROM_NAME=Maulana Azad College Of Engineering & Technology
+GMAIL_REPLY_TO=admin@macet.edu
 ```
 
 ### Step 4: Install Dependencies
@@ -103,11 +103,11 @@ export const sendBookingConfirmation = async (bookingData: {
 	const mailOptions = {
 		from: EMAIL_CONFIG.from,
 		to: bookingData.to,
-		subject: `✅ Booking Confirmed - ${bookingData.hallName} | Amity University Patna`,
+		subject: `✅ Booking Confirmed - ${bookingData.hallName} | Maulana Azad College Of Engineering & Technology`,
 		html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); color: white; padding: 30px; text-align: center;">
-          <h1>🏛️ Amity University Patna</h1>
+          <h1>🏛️ Maulana Azad College Of Engineering & Technology</h1>
           <h2>Seminar Hall Booking Confirmed</h2>
         </div>
         
@@ -141,7 +141,7 @@ export const sendBookingConfirmation = async (bookingData: {
         </div>
         
         <div style="background: #f9fafb; padding: 25px; text-align: center; color: #6b7280;">
-          <p>© 2025 Amity University Patna. All rights reserved.</p>
+          <p>© 2025 Maulana Azad College Of Engineering & Technology. All rights reserved.</p>
         </div>
       </div>
     `,
@@ -347,7 +347,7 @@ Before going live, verify:
 | Problem                  | Solution                                          |
 | ------------------------ | ------------------------------------------------- |
 | "Invalid login" error    | Ensure 2FA is enabled and app password is correct |
-| Emails go to spam        | Use your institutional domain (@amity.edu)        |
+| Emails go to spam        | Use your institutional domain (@macet.edu)        |
 | Connection timeout       | Check firewall settings, try different network    |
 | "Less secure apps" error | Use app password instead of regular password      |
 | Daily limit exceeded     | Gmail allows 2000 emails/day - monitor usage      |
@@ -362,7 +362,7 @@ Before going live, verify:
 
 ## 💡 Pro Tips
 
-1. **Use Institutional Email**: @amity.edu domain has better deliverability
+1. **Use Institutional Email**: @macet.edu domain has better deliverability
 2. **Monitor Daily Limits**: Gmail allows 2000 emails/day
 3. **Template Testing**: Test emails on different devices/clients
 4. **Backup Plan**: Have SendGrid as backup if needed

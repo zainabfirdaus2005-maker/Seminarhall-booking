@@ -565,7 +565,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = () => {
 						Seminar Hall Booking App v1.0.0
 					</Text>
 					<Text style={styles.versionSubtext}>
-						© 2024 Amity University Patna
+						© 2024 Maulana Azad College Of Engineering & Technology
 					</Text>
 					<Text style={styles.versionSubtext}>Developed by{"\n"}Vikash Kelly{"\n"}Nikhil Anand</Text>
 				</View>

@@ -1,8 +1,8 @@
-# 🏛️ Amity University Patna - Seminar Hall Booking System
+# 🏛️ Maulana Azad College Of Engineering & Technology - Seminar Hall Booking System
 
 ## 📋 Project Overview
 
-A comprehensive booking management system designed specifically for Amity University Patna to eliminate seminar hall booking conflicts and streamline the reservation process for faculty members.
+A comprehensive booking management system designed specifically for Maulana Azad College Of Engineering & Technology to eliminate seminar hall booking conflicts and streamline the reservation process for faculty members.
 
 ### 🎯 Problem Statement
 
@@ -182,7 +182,7 @@ interface Booking {
 const emailService = {
 	provider: "SendGrid",
 	apiKey: process.env.SENDGRID_API_KEY,
-	fromEmail: "bookings@amity.edu",
+	fromEmail: "bookings@macet.edu",
 	templates: {
 		bookingConfirmation: "d-bookingconfirmation123",
 		bookingCancellation: "d-bookingcancellation456",
@@ -190,7 +190,7 @@ const emailService = {
 		bookingConflict: "d-bookingconflict000"
 	}
 };
-	fromEmail: "bookings@amity.edu",
+	fromEmail: "bookings@macet.edu",
 	templates: {
 		bookingConfirmation: "booking-confirmation",
 		bookingCancellation: "booking-cancellation",
@@ -212,7 +212,7 @@ Your seminar hall booking has been confirmed! 📍 Hall: {{hallName}} 📅 Date:
 {{bookingDate}} ⏰ Time: {{startTime}} - {{endTime}} 👥 Capacity:
 {{attendeeCount}} people 🎯 Purpose: {{eventTitle}} Equipment Included: {{#each
 equipment}} - {{this}} {{/each}} Important Notes: - Please arrive 10 minutes
-before your scheduled time - Contact admin for any changes: admin@amity.edu -
+before your scheduled time - Contact admin for any changes: admin@macet.edu -
 Cancellation allowed up to 24 hours before the event Best regards, Amity
 University Patna
 ```
@@ -547,7 +547,7 @@ CREATE POLICY "Admins can view all bookings" ON bookings
 ### 🛠️ Support Channels
 
 - In-app help center
-- Email support: support@amity.edu
+- Email support: support@macet.edu
 - Admin dashboard for issue tracking
 - Video tutorials and documentation
 
@@ -562,7 +562,7 @@ CREATE POLICY "Admins can view all bookings" ON bookings
 
 ## 📝 Conclusion
 
-This comprehensive seminar hall booking system will revolutionize how Amity University Patna manages its facilities. By implementing modern technologies like Expo, Supabase, and automated email confirmations, we'll eliminate booking conflicts and create a seamless experience for all faculty members.
+This comprehensive seminar hall booking system will revolutionize how Maulana Azad College Of Engineering & Technology manages its facilities. By implementing modern technologies like Expo, Supabase, and automated email confirmations, we'll eliminate booking conflicts and create a seamless experience for all faculty members.
 
 The system is designed to be scalable, secure, and user-friendly, ensuring that it can grow with the university's needs while providing immediate value to all stakeholders.
 
@@ -577,7 +577,7 @@ The system is designed to be scalable, secure, and user-friendly, ensuring that 
 **Contact Information:**
 
 - Project Lead: [Your Name]
-- Email: [your.email@amity.edu]
+- Email: [your.email@macet.edu]
 - Phone: [Your Phone Number]
 
 ---

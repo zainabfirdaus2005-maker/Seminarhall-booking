@@ -14,7 +14,7 @@ export default function LoadingScreen() {
 			/>
 
 			<View style={styles.content}>
-				<Text style={styles.title}>Amity University Patna</Text>
+				<Text style={styles.title}>Maulana Azad College Of Engineering & Technology</Text>
 				<Text style={styles.subtitle}>Seminar Hall Booking</Text>
 
 				<ActivityIndicator size="large" color="white" style={styles.loader} />

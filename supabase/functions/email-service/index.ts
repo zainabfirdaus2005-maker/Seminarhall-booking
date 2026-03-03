@@ -39,7 +39,7 @@ const getEmailTemplate = (template: string, data: EmailData): EmailTemplate => {
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f8f9fa;">
             <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
               <div style="text-align: center; margin-bottom: 30px;">
-                <h1 style="color: #007AFF; margin: 0;">🏛️ Amity University Patna</h1>
+                <h1 style="color: #007AFF; margin: 0;">🏛️ Maulana Azad College Of Engineering & Technology</h1>
                 <h2 style="color: #333; margin: 10px 0;">Seminar Hall Booking Confirmation</h2>
               </div>
               
@@ -89,9 +89,9 @@ const getEmailTemplate = (template: string, data: EmailData): EmailTemplate => {
               </div>
               
               <div style="border-top: 1px solid #eee; padding-top: 20px; margin-top: 30px; text-align: center; color: #666; font-size: 14px;">
-                <p>Best regards,<br><strong>Amity University Patna</strong><br>Seminar Hall Booking Team</p>
+                <p>Best regards,<br><strong>Maulana Azad College Of Engineering & Technology</strong><br>Seminar Hall Booking Team</p>
                 <p style="margin-top: 15px;">
-                  Need help? Contact us at <a href="mailto:support@amitypatna.edu" style="color: #007AFF;">support@amitypatna.edu</a><br>
+                  Need help? Contact us at <a href="mailto:support@macet.edu" style="color: #007AFF;">support@macet.edu</a><br>
                   Developer: <a href="mailto:vikashkelly@gmail.com" style="color: #007AFF;">vikashkelly@gmail.com</a>
                 </p>
               </div>
@@ -117,10 +117,10 @@ What's Next?
 Your booking is now under review by our admin team. You'll receive an email notification once your booking is approved or if any changes are needed.
 
 Best regards,
-Amity University Patna
+Maulana Azad College Of Engineering & Technology
 Seminar Hall Booking Team
 
-Need help? Contact us at support@amitypatna.edu
+Need help? Contact us at support@macet.edu
 Developer: vikashkelly@gmail.com
         `
       };
@@ -181,9 +181,9 @@ Developer: vikashkelly@gmail.com
               </div>
               
               <div style="border-top: 1px solid #eee; padding-top: 20px; margin-top: 30px; text-align: center; color: #666; font-size: 14px;">
-                <p>Best regards,<br><strong>Amity University Patna</strong><br>Seminar Hall Booking Team</p>
+                <p>Best regards,<br><strong>Maulana Azad College Of Engineering & Technology</strong><br>Seminar Hall Booking Team</p>
                 <p style="margin-top: 15px;">
-                  Need help? Contact us at <a href="mailto:support@amitypatna.edu" style="color: #007AFF;">support@amitypatna.edu</a><br>
+                  Need help? Contact us at <a href="mailto:support@macet.edu" style="color: #007AFF;">support@macet.edu</a><br>
                   Developer: <a href="mailto:vikashkelly@gmail.com" style="color: #007AFF;">vikashkelly@gmail.com</a>
                 </p>
               </div>
@@ -211,10 +211,10 @@ Important Reminders:
 • Contact admin if you need to make any changes
 
 Best regards,
-Amity University Patna
+Maulana Azad College Of Engineering & Technology
 Seminar Hall Booking Team
 
-Need help? Contact us at support@amitypatna.edu
+Need help? Contact us at support@macet.edu
 Developer: vikashkelly@gmail.com
         `
       };
@@ -277,13 +277,13 @@ Developer: vikashkelly@gmail.com
               
               <div style="text-align: center; margin: 30px 0;">
                 <a href="${baseUrl}" style="background-color: #17a2b8; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-right: 10px;">📱 Open App</a>
-                <a href="mailto:support@amitypatna.edu" style="background-color: #6c757d; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold;">✉️ Contact Admin</a>
+                <a href="mailto:support@macet.edu" style="background-color: #6c757d; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold;">✉️ Contact Admin</a>
               </div>
               
               <div style="border-top: 1px solid #eee; padding-top: 20px; margin-top: 30px; text-align: center; color: #666; font-size: 14px;">
-                <p>Best regards,<br><strong>Amity University Patna</strong><br>Seminar Hall Booking Team</p>
+                <p>Best regards,<br><strong>Maulana Azad College Of Engineering & Technology</strong><br>Seminar Hall Booking Team</p>
                 <p style="margin-top: 15px;">
-                  Need help? Contact us at <a href="mailto:support@amitypatna.edu" style="color: #007AFF;">support@amitypatna.edu</a><br>
+                  Need help? Contact us at <a href="mailto:support@macet.edu" style="color: #007AFF;">support@macet.edu</a><br>
                   Developer: <a href="mailto:vikashkelly@gmail.com" style="color: #007AFF;">vikashkelly@gmail.com</a>
                 </p>
               </div>
@@ -312,10 +312,10 @@ Next Steps:
 • Check alternative time slots in the app
 
 Best regards,
-Amity University Patna
+Maulana Azad College Of Engineering & Technology
 Seminar Hall Booking Team
 
-Need help? Contact us at support@amitypatna.edu
+Need help? Contact us at support@macet.edu
 Developer: vikashkelly@gmail.com
         `
       };
@@ -373,9 +373,9 @@ Developer: vikashkelly@gmail.com
               </div>
               
               <div style="border-top: 1px solid #eee; padding-top: 20px; margin-top: 30px; text-align: center; color: #666; font-size: 14px;">
-                <p>Best regards,<br><strong>Amity University Patna</strong><br>Seminar Hall Booking Team</p>
+                <p>Best regards,<br><strong>Maulana Azad College Of Engineering & Technology</strong><br>Seminar Hall Booking Team</p>
                 <p style="margin-top: 15px;">
-                  Need help? Contact us at <a href="mailto:support@amitypatna.edu" style="color: #007AFF;">support@amitypatna.edu</a><br>
+                  Need help? Contact us at <a href="mailto:support@macet.edu" style="color: #007AFF;">support@macet.edu</a><br>
                   Developer: <a href="mailto:vikashkelly@gmail.com" style="color: #007AFF;">vikashkelly@gmail.com</a>
                 </p>
               </div>
@@ -403,10 +403,10 @@ Preparation Checklist:
 • Have contact information for technical support
 
 Best regards,
-Amity University Patna
+Maulana Azad College Of Engineering & Technology
 Seminar Hall Booking Team
 
-Need help? Contact us at support@amitypatna.edu
+Need help? Contact us at support@macet.edu
 Developer: vikashkelly@gmail.com
         `
       };
@@ -432,7 +432,7 @@ const sendEmail = async (to: string, subject: string, html: string, text: string
     },
   };
 
-  const fromName = Deno.env.get('GMAIL_FROM_NAME') || 'Amity Seminar Hall Booking';
+  const fromName = Deno.env.get('GMAIL_FROM_NAME') || 'MACET Seminar Hall Booking';
   const fromEmail = Deno.env.get('GMAIL_FROM_EMAIL') || smtp.auth.user;
 
   // Using SMTP with fetch (for Edge Functions)

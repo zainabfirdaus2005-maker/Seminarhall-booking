@@ -1,6 +1,6 @@
-# 🏛️ Amity University Patna - Seminar Hall Booking App
+# 🏛️ Maulana Azad College Of Engineering & Technology - Seminar Hall Booking App
 
-A modern React Native Expo application designed specifically for Amity University Patna to eliminate seminar hall booking conflicts and streamline the reservation process for faculty members.
+A modern React Native Expo application designed specifically for Maulana Azad College Of Engineering & Technology to eliminate seminar hall booking conflicts and streamline the reservation process for faculty members.
 
 ## 🎯 Project Overview
 

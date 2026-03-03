@@ -17,10 +17,10 @@ npm install -g eas-cli
 
 ```bash
 # Create new Expo project
-npx create-expo-app AmityHallBooking --template
+npx create-expo-app MACETHallBooking --template
 
 # Navigate to project
-cd AmityHallBooking
+cd MACETHallBooking
 
 # Install additional dependencies
 npx expo install expo-notifications expo-calendar
@@ -76,10 +76,10 @@ EXPO_PUBLIC_SUPABASE_URL = your_supabase_url;
 EXPO_PUBLIC_SUPABASE_ANON_KEY = your_supabase_anon_key;
 
 // Gmail SMTP (Recommended - FREE)
-GMAIL_USER = admin@amity.edu;
+GMAIL_USER = admin@macet.edu;
 GMAIL_APP_PASSWORD = your_16_character_app_password;
-GMAIL_FROM_NAME = "Amity University Patna";
-GMAIL_REPLY_TO = admin@amity.edu;
+GMAIL_FROM_NAME = "Maulana Azad College Of Engineering & Technology";
+GMAIL_REPLY_TO = admin@macet.edu;
 
 // SendGrid (Alternative - Paid)
 SENDGRID_API_KEY = your_sendgrid_api_key;
@@ -124,11 +124,11 @@ export const sendBookingConfirmation = async (booking: Booking) => {
 2. **Generate App Password**:
    - Go to Google Account → Security → App passwords
    - Select "Mail" and "Other (custom name)"
-   - Enter "Amity Booking App"
+   - Enter "MACET Booking App"
    - Copy the 16-character password
 3. **Add to Environment Variables**:
    ```bash
-   GMAIL_USER=admin@amity.edu
+   GMAIL_USER=admin@macet.edu
    GMAIL_APP_PASSWORD=abcd efgh ijkl mnop
    ```
 
@@ -145,7 +145,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
 export const sendBookingConfirmation = async (booking: Booking) => {
 	const msg = {
 		to: booking.faculty.email,
-		from: "bookings@amity.edu",
+		from: "bookings@macet.edu",
 		templateId: "d-bookingconfirmation123",
 		dynamicTemplateData: {
 			facultyName: booking.faculty.name,
@@ -182,7 +182,7 @@ export const generateBookingEmailTemplate = (booking: Booking) => `
 <body>
   <div class="container">
     <div class="header">
-      <h1>🏛️ Amity University Patna</h1>
+      <h1>🏛️ Maulana Azad College Of Engineering & Technology</h1>
       <h2>Seminar Hall Booking Confirmation</h2>
     </div>
     
@@ -224,7 +224,7 @@ export const generateBookingEmailTemplate = (booking: Booking) => `
         <h3>⚠️ Important Notes</h3>
         <ul>
           <li>Please arrive 10 minutes before your scheduled time</li>
-          <li>Contact admin for any changes: admin@amity.edu</li>
+          <li>Contact admin for any changes: admin@macet.edu</li>
           <li>Cancellation allowed up to 24 hours before the event</li>
           <li>Ensure all equipment is returned in working condition</li>
         </ul>
@@ -235,7 +235,7 @@ export const generateBookingEmailTemplate = (booking: Booking) => `
     
     <div class="footer">
       <p>This is an automated email. Please do not reply.</p>
-      <p>© 2025 Amity University Patna. All rights reserved.</p>
+      <p>© 2025 Maulana Azad College Of Engineering & Technology. All rights reserved.</p>
     </div>
   </div>
 </body>
@@ -320,7 +320,7 @@ export const sendBookingNotification = async (
 ### Project Directory Structure
 
 ```
-AmityHallBooking/
+MACETHallBooking/
 ├── app/                    # Expo Router screens
 │   ├── (auth)/            # Authentication screens
 │   ├── (tabs)/            # Main app tabs
@@ -500,9 +500,9 @@ eas build --profile production --platform all
 ```json
 // public/manifest.json
 {
-	"name": "Amity Hall Booking",
-	"short_name": "AmityBooking",
-	"description": "Seminar Hall Booking System for Amity University Patna",
+	"name": "MACET Hall Booking",
+	"short_name": "MACETBooking",
+	"description": "Seminar Hall Booking System for Maulana Azad College Of Engineering & Technology",
 	"start_url": "/",
 	"display": "standalone",
 	"background_color": "#ffffff",
