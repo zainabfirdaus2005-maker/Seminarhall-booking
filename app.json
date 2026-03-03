@@ -48,9 +48,8 @@
 		],
 		"extra": {
 			"eas": {
-				"projectId": "3474eaee-01b2-4e2c-8ba1-83ac94ced14e"
+				"projectId": ""
 			}
-		},
-		"owner": "cypherninja"
+		}
 	}
 }
